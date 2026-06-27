@@ -74,13 +74,33 @@ export function AppProvider({ children }) {
     }
   }, [user, profile, expenses, people, loading]); 
 
+  const getFriendlyErrorMessage = (error) => {
+    const code = error.code || '';
+    if (code === 'auth/configuration-not-found' || code === 'auth/user-not-found' || code === 'auth/invalid-credential') {
+      return "User not found or email not found";
+    }
+    if (code === 'auth/wrong-password') {
+      return "Incorrect password. Please try again.";
+    }
+    if (code === 'auth/email-already-in-use') {
+      return "This email is already registered. Please log in.";
+    }
+    if (code === 'auth/invalid-email') {
+      return "Please enter a valid email address.";
+    }
+    if (code === 'auth/weak-password') {
+      return "Password should be at least 6 characters.";
+    }
+    return error.message || "An unexpected error occurred.";
+  };
+
   const login = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.code || error.message };
+      return { success: false, error: getFriendlyErrorMessage(error) };
     }
   };
 
@@ -91,7 +111,7 @@ export function AppProvider({ children }) {
       setProfile(prev => ({ ...prev, ...profileDetails }));
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.code || error.message };
+      return { success: false, error: getFriendlyErrorMessage(error) };
     }
   };
 
