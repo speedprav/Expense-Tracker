@@ -59,7 +59,10 @@ function Navigation({ onOpenCalendar }) {
 function MainLayout() {
   const { user } = useAppContext();
   const [showCalendar, setShowCalendar] = useState(false);
-  const [showAuth, setShowAuth] = useState(false);
+  
+  // Detect if running as installed app (APK or PWA)
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  const [showAuth, setShowAuth] = useState(isStandalone);
 
   if (!user) {
     if (showAuth) {
