@@ -61,6 +61,30 @@ const resources = {
       // Common
       "Yes": "Yes",
       "No": "No"
+// Auth & Google
+      "or": "or",
+      "Sign in with Google": "Sign in with Google",
+      
+      // CalendarModal
+      "Calendar View": "Calendar View",
+      "Total Spent": "Total Spent",
+      "Total Income": "Total Income",
+      "Total Earned": "Total Earned",
+      "No transactions on this day": "No transactions on this day",
+      
+      // Landing
+      "To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'.": "To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'.",
+      "The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!": "The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!",
+      "Log In / Launch Web App": "Log In / Launch Web App",
+      "Download the": "Download the",
+      "Expensr Copilot™": "Expensr Copilot™",
+      "Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.": "Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.",
+      "FAST & SECURE": "FAST & SECURE",
+      "ADD TO HOMESCREEN": "ADD TO HOMESCREEN",
+      "Install App": "Install App",
+      "DIRECT DOWNLOAD": "DIRECT DOWNLOAD",
+      "Download APK": "Download APK",
+      "© Copyright 2026 Expensr Inc. — All rights reserved.": "© Copyright 2026 Expensr Inc. — All rights reserved."
     }
   },
   Hindi: {
@@ -120,7 +144,32 @@ const resources = {
       
       // Common
       "Yes": "हाँ",
-      "No": "नहीं"
+      "No": "नहीं",
+
+      // Auth & Google
+      "or": "या",
+      "Sign in with Google": "Google के साथ साइन इन करें",
+      
+      // CalendarModal
+      "Calendar View": "कैलेंडर दृश्य",
+      "Total Spent": "कुल खर्च",
+      "Total Income": "कुल आय",
+      "Total Earned": "कुल कमाई",
+      "No transactions on this day": "इस दिन कोई लेन-देन नहीं",
+      
+      // Landing
+      "To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'.": "iOS पर इंस्टॉल करने के लिए: 'शेयर' आइकन पर टैप करें, फिर 'होम स्क्रीन में जोड़ें' पर टैप करें।",
+      "The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!": "इंस्टॉल प्रॉम्प्ट तैयार नहीं है। हो सकता है आपने ऐप पहले ही इंस्टॉल कर लिया हो।",
+      "Log In / Launch Web App": "लॉग इन / वेब ऐप लॉन्च करें",
+      "Download the": "डाउनलोड करें",
+      "Expensr Copilot™": "एक्सपेंसर कोपायलट™",
+      "Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.": "स्मार्ट ट्रैकिंग के लिए हमारा AI-पावर्ड मोबाइल ऐप प्राप्त करें।",
+      "FAST & SECURE": "तेज़ और सुरक्षित",
+      "ADD TO HOMESCREEN": "होमस्क्रीन में जोड़ें",
+      "Install App": "ऐप इंस्टॉल करें",
+      "DIRECT DOWNLOAD": "सीधा डाउनलोड",
+      "Download APK": "APK डाउनलोड करें",
+      "© Copyright 2026 Expensr Inc. — All rights reserved.": "© कॉपीराइट 2026 एक्सपेंसर इंक। — सर्वाधिकार सुरक्षित।"
     }
   },
   Spanish: {
@@ -180,19 +229,53 @@ const resources = {
       
       // Common
       "Yes": "Sí",
-      "No": "No"
+      "No": "No",
+
+      // Auth & Google
+      "or": "o",
+      "Sign in with Google": "Iniciar sesión con Google",
+      
+      // CalendarModal
+      "Calendar View": "Vista de calendario",
+      "Total Spent": "Total gastado",
+      "Total Income": "Ingresos totales",
+      "Total Earned": "Total ganado",
+      "No transactions on this day": "No hay transacciones este día",
+      
+      // Landing
+      "To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'.": "Para instalar en iOS: toca 'Compartir' y luego 'Añadir a la pantalla de inicio'.",
+      "The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!": "El aviso de instalación no está listo. Puede que ya tengas la app.",
+      "Log In / Launch Web App": "Iniciar sesión / Abrir App",
+      "Download the": "Descarga",
+      "Expensr Copilot™": "Expensr Copilot™",
+      "Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.": "Consigue nuestra app móvil con IA para seguimiento inteligente.",
+      "FAST & SECURE": "RÁPIDO Y SEGURO",
+      "ADD TO HOMESCREEN": "AÑADIR A INICIO",
+      "Install App": "Instalar App",
+      "DIRECT DOWNLOAD": "DESCARGA DIRECTA",
+      "Download APK": "Descargar APK",
+      "© Copyright 2026 Expensr Inc. — All rights reserved.": "© Copyright 2026 Expensr Inc. — Todos los derechos reservados."
     }
   }
 };
+
+const savedProfile = localStorage.getItem('expense-profile');
+let initialLang = "English";
+if (savedProfile) {
+  try {
+    const p = JSON.parse(savedProfile);
+    if (p.language) initialLang = p.language;
+  } catch (e) {}
+}
 
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: "English", // Default language
+    lng: initialLang,
     fallbackLng: "English",
     interpolation: {
-      escapeValue: false // React already safely escapes
+      escapeValue: false
     }
   });
 
