@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth, backupUserData } from '../firebase';
+import { auth, backupUserData, googleProvider } from '../firebase';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
+  signInWithPopup,
   signOut, 
   onAuthStateChanged,
   sendEmailVerification
@@ -100,7 +101,31 @@ export function AppProvider({ children }) {
     if (code === 'auth/weak-password') {
       return "Password should be at least 6 characters.";
     }
+    if (code === 'auth/popup-closed-by-user') {
+      return "Google sign-in was cancelled.";
+    }
     return error.message || "An unexpected error occurred.";
+  };
+
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      // Create basic profile defaults if signing in for the first time
+      if (!profile || !profile.name) {
+        setProfile(prev => ({
+          ...prev,
+          name: result.user.displayName || 'Google User',
+          mode: 'student',
+          currency: '₹',
+          language: 'English'
+        }));
+      }
+      setUser(result.user);
+      return { success: true };
+    } catch (error) {
+      console.error("Google Auth Error:", error);
+      return { success: false, error: getFriendlyErrorMessage(error) };
+    }
   };
 
   const login = async (email, password) => {
@@ -182,6 +207,7 @@ export function AppProvider({ children }) {
     loading,
     login,
     signup,
+    loginWithGoogle,
     logout,
     profile,
     updateProfile,

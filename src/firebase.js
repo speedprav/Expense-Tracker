@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -16,6 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
 // Helper function to backup user data to cloud
 export const backupUserData = async (userId, data) => {
@@ -39,4 +40,4 @@ export const backupUserData = async (userId, data) => {
   }
 };
 
-export { auth, db };
+export { auth, db, googleProvider };
