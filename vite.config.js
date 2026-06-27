@@ -18,15 +18,31 @@ export default defineConfig({
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
-        ]
+        ],
+        screenshots: [
+          {
+            src: "mockup.png",
+            sizes: "710x1391",
+            type: "image/png",
+            form_factor: "narrow"
+          }
+        ],
+        orientation: "portrait"
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
