@@ -142,40 +142,71 @@ export default function Landing({ onLaunch }) {
             {/* Buttons & QR */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'flex-start' }}>
               
-              {/* Download APK Button */}
-              <a 
-                href="/Expensr.apk" 
-                download="Expensr.apk"
-                style={{
-                  backgroundColor: 'white',
-                  color: 'black',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  border: 'none',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                  transition: 'background-color 0.2s',
-                  textDecoration: 'none'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
-              >
-                {/* Android SVG Icon */}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993s-.4482.9997-.9993.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5515 0 .9997.4482.9997.9993s-.4482.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592c.1118-.1946.0462-.444-.1481-.5558-.1946-.1118-.444-.0462-.5558.1481l-2.0415 3.536c-1.4055-.6363-2.9831-1.002-4.6644-1.002s-3.2589.3657-4.6644 1.002l-2.0415-3.536c-.1118-.1943-.3612-.2599-.5558-.1481-.1943.1118-.2599.3612-.1481.5558l1.9973 3.4592C4.1624 10.3705 2.1466 12.8718 2 15.8601h20c-.1466-2.9883-2.1624-5.4896-5.0725-6.5387z" />
-                </svg>
-                <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.05em', marginBottom: '2px', color: '#374151' }}>
-                    DIRECT DOWNLOAD
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                {/* Install PWA Button */}
+                <button 
+                  onClick={handleInstallClick} 
+                  style={{
+                    backgroundColor: 'white',
+                    color: 'black',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                >
+                  <Apple size={28} color="black" fill="black" />
+                  <div style={{ textAlign: 'left' }}>
+                    <div style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.05em', marginBottom: '2px', color: '#374151' }}>
+                      {isInstallable ? 'FAST & SECURE' : 'ADD TO HOMESCREEN'}
+                    </div>
+                    <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
+                      Install App
+                    </div>
                   </div>
-                  <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
-                    Download APK
+                </button>
+
+                {/* Download APK Button */}
+                <a 
+                  href="/Expensr.apk" 
+                  download="Expensr.apk"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    color: 'white',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+                >
+                  {/* Android SVG Icon */}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993s-.4482.9997-.9993.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5515 0 .9997.4482.9997.9993s-.4482.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592c.1118-.1946.0462-.444-.1481-.5558-.1946-.1118-.444-.0462-.5558.1481l-2.0415 3.536c-1.4055-.6363-2.9831-1.002-4.6644-1.002s-3.2589.3657-4.6644 1.002l-2.0415-3.536c-.1118-.1943-.3612-.2599-.5558-.1481-.1943.1118-.2599.3612-.1481.5558l1.9973 3.4592C4.1624 10.3705 2.1466 12.8718 2 15.8601h20c-.1466-2.9883-2.1624-5.4896-5.0725-6.5387z" />
+                  </svg>
+                  <div style={{ textAlign: 'left' }}>
+                    <div style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.05em', marginBottom: '2px', color: '#a1a1aa' }}>
+                      DIRECT DOWNLOAD
+                    </div>
+                    <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
+                      Download APK
+                    </div>
                   </div>
-                </div>
-              </a>
+                </a>
+              </div>
 
               {/* QR Code */}
               <div style={{
