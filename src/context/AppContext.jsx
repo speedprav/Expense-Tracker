@@ -175,6 +175,14 @@ export function AppProvider({ children }) {
     setExpenses(prev => [{ ...expense, id: Date.now().toString() }, ...prev]);
   };
 
+  const deleteExpense = (id) => {
+    setExpenses(prev => prev.filter(e => e.id !== id));
+  };
+
+  const updateExpense = (id, updatedExpense) => {
+    setExpenses(prev => prev.map(e => e.id === id ? { ...e, ...updatedExpense } : e));
+  };
+
   const addPerson = (person) => {
     const newPerson = { ...person, id: Date.now().toString(), balance: 0, transactions: [] };
     setPeople([...people, newPerson]);
@@ -216,6 +224,8 @@ export function AppProvider({ children }) {
     updateProfile,
     expenses,
     addExpense,
+    deleteExpense,
+    updateExpense,
     people,
     addPerson,
     updatePersonBalance

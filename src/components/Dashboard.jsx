@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Plus, ArrowUpRight, ArrowDownRight, Briefcase, User as UserIcon } from 'lucide-react';
+import { Plus, ArrowUpRight, ArrowDownRight, Briefcase, User as UserIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const { profile, expenses, addExpense } = useAppContext();
+  const { profile, expenses, addExpense, deleteExpense, updateExpense } = useAppContext();
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   
   const isBusiness = profile.mode === 'business';
   const currency = profile.currency || '₹';
@@ -44,11 +45,19 @@ export default function Dashboard() {
     e.preventDefault();
     if (!newExpense.amount) return;
     
-    addExpense({
-      ...newExpense,
-      amount: Number(newExpense.amount),
-      date: new Date().toISOString()
-    });
+    if (editingId) {
+      updateExpense(editingId, {
+        ...newExpense,
+        amount: Number(newExpense.amount)
+      });
+      setEditingId(null);
+    } else {
+      addExpense({
+        ...newExpense,
+        amount: Number(newExpense.amount),
+        date: new Date().toISOString()
+      });
+    }
     
     setShowAddModal(false);
     setNewExpense({ 
@@ -78,7 +87,11 @@ export default function Dashboard() {
             {today.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
-        <button className="btn btn-primary shadow-neon" onClick={() => setShowAddModal(true)}>
+        <button className="btn btn-primary shadow-neon" onClick={() => {
+          setEditingId(null);
+          setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '' });
+          setShowAddModal(true);
+        }}>
           <Plus size={18} /> {t('New Transaction')}
         </button>
       </div>
@@ -173,8 +186,38 @@ export default function Dashboard() {
                   <span className="text-xs text-muted">{new Date(exp.date).toLocaleDateString()}</span>
                 </div>
               </div>
-              <div className={`text-xl font-bold ${exp.type === 'expense' ? 'text-danger' : 'text-success'}`}>
-                {exp.type === 'expense' ? '-' : '+'}{currency}{exp.amount}
+              <div className="flex items-center gap-4">
+                <div className={`text-xl font-bold ${exp.type === 'expense' ? 'text-danger' : 'text-success'}`}>
+                  {exp.type === 'expense' ? '-' : '+'}{currency}{exp.amount}
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => {
+                      setEditingId(exp.id);
+                      setNewExpense({
+                        amount: exp.amount,
+                        category: exp.category,
+                        description: exp.description,
+                        type: exp.type,
+                        invoiceNumber: exp.invoiceNumber || ''
+                      });
+                      setShowAddModal(true);
+                    }}
+                    className="p-1.5 text-muted hover:text-blue-400 hover:bg-gray-700 rounded transition-colors"
+                  >
+                    <Edit2 size={16} />
+                  </button>
+                  <button 
+                    onClick={() => {
+                      if (window.confirm(t('Are you sure you want to delete this transaction?'))) {
+                        deleteExpense(exp.id);
+                      }
+                    }}
+                    className="p-1.5 text-muted hover:text-red-400 hover:bg-gray-700 rounded transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -191,7 +234,9 @@ export default function Dashboard() {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div className="glass-panel-no-hover p-8 w-full max-w-md animate-fade-up">
             <h2 className="text-2xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-              {t('New')} {isBusiness ? t('Business') : t('Personal')} {t('Transaction')}
+              {editingId ? t('Update Transaction') : (
+                <>{t('New')} {isBusiness ? t('Business') : t('Personal')} {t('Transaction')}</>
+              )}
             </h2>
             <form onSubmit={handleAddSubmit}>
               <div className="grid grid-cols-2 gap-4 mb-4">
@@ -233,8 +278,8 @@ export default function Dashboard() {
               )}
               
               <div className="flex gap-4 mt-8">
-                <button type="button" className="btn btn-outline flex-1" onClick={() => setShowAddModal(false)}>{t('Cancel')}</button>
-                <button type="submit" className="btn btn-primary flex-1 shadow-neon">{t('Save Transaction')}</button>
+                <button type="button" className="btn btn-outline flex-1" onClick={() => { setShowAddModal(false); setEditingId(null); }}>{t('Cancel')}</button>
+                <button type="submit" className="btn btn-primary flex-1 shadow-neon">{editingId ? t('Update') : t('Save Transaction')}</button>
               </div>
             </form>
           </div>
