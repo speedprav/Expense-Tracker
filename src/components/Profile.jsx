@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Save, Download, Shield, Cloud } from 'lucide-react';
+import { Save, Download, Shield, Cloud, LogOut } from 'lucide-react';
 import { backupUserData } from '../firebase';
 import { useTranslation } from 'react-i18next';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
-  const { profile, updateProfile, expenses, people, user } = useAppContext();
+  const { profile, updateProfile, expenses, people, user, logout } = useAppContext();
   
   const [name, setName] = useState(profile.name || '');
   const [mode, setMode] = useState(profile.mode || 'student');
@@ -182,6 +182,18 @@ export default function Profile() {
             </p>
             <button onClick={handleExport} className="w-full py-4 rounded-xl font-medium text-gray-400 bg-white/5 hover:bg-white/10 hover:text-white transition-all border border-white/5 flex items-center justify-center gap-2">
               <Download size={18} /> {t('Download JSON Backup')}
+            </button>
+          </div>
+
+          <div className="glass-card rounded-3xl p-6 border-red-500/20">
+            <h3 className="text-lg font-light mb-2 text-red-400 flex items-center gap-2">
+              <LogOut size={20} /> {t('Sign Out')}
+            </h3>
+            <p className="text-sm text-gray-400 mb-6">
+              {t('Sign out of your account securely.')}
+            </p>
+            <button onClick={() => { if(window.confirm('Are you sure you want to log out?')) logout(); }} className="w-full py-4 rounded-xl font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 transition-all border border-red-500/20 flex items-center justify-center gap-2">
+              <LogOut size={18} /> {t('Log Out')}
             </button>
           </div>
         </div>

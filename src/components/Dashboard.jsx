@@ -263,7 +263,7 @@ export default function Dashboard() {
                     <div className={`font-medium text-lg tracking-wide ${exp.type === 'expense' ? 'text-gray-100' : 'text-green-400'}`}>
                       {exp.type === 'expense' ? '-' : '+'}{currency}{exp.amount.toLocaleString('en-IN')}
                     </div>
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 md:opacity-100 md:translate-x-0">
+                    <div className="flex gap-2 transition-all">
                       <button onClick={() => {
                         setEditingId(exp.id);
                         setNewExpense(exp);
