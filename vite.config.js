@@ -36,13 +36,16 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: "mockup.png",
-            sizes: "710x1391",
+            src: "pwa-512x512.png",
+            sizes: "512x512",
             type: "image/png",
-            form_factor: "narrow"
+            form_factor: "wide"
           }
         ],
-        orientation: "portrait"
+        orientation: "portrait",
+        id: "/",
+        categories: ["finance", "productivity"],
+        prefer_related_applications: false
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
