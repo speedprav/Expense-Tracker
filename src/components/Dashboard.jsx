@@ -74,20 +74,20 @@ export default function Dashboard() {
 
   return (
     <div className="container animate-fade-in">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-end mb-12">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            {isBusiness ? <Briefcase size={20} className="text-primary" /> : <UserIcon size={20} className="text-accent" />}
-            <span className="badge badge-primary">{isBusiness ? t('Business Account') : t('Personal Account')}</span>
+          <div className="flex items-center gap-2 mb-2">
+            {isBusiness ? <Briefcase size={16} className="text-primary" /> : <UserIcon size={16} className="text-accent" />}
+            <span className="text-xs uppercase tracking-widest text-primary font-medium">{isBusiness ? t('Business Account') : t('Personal Account')}</span>
           </div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+          <h1 className="text-4xl font-light tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] to-[#fcfcfc]">
             {profile.name ? `${t('Welcome back')}, ${profile.name.split(' ')[0]}` : (isBusiness ? profile.businessName || t('Your Business') : t('Welcome back'))}
           </h1>
-          <p className="text-muted text-sm mt-1">
+          <p className="text-muted text-sm mt-2 font-light tracking-wide">
             {today.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
-        <button className="btn btn-primary shadow-neon" onClick={() => {
+        <button className="btn btn-primary" onClick={() => {
           setEditingId(null);
           setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '' });
           setShowAddModal(true);
@@ -97,100 +97,122 @@ export default function Dashboard() {
       </div>
 
       {isBusiness ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="glass-panel p-6 col-span-1 md:col-span-2 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary opacity-10 rounded-full blur-3xl"></div>
-            <h2 className="text-muted text-sm font-medium mb-1 uppercase tracking-wider">{t('Net Profit (This Month)')}</h2>
-            <div className={`text-4xl font-bold mb-4 flex items-center ${profit >= 0 ? 'text-success' : 'text-danger'}`}>
-              <span className="mr-1">{currency}</span>
-              {profit.toLocaleString('en-IN')}
-            </div>
-            <div className="flex gap-4">
-              <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-gray-800 flex-1">
-                <p className="text-xs text-muted mb-1">{t('Total Revenue')}</p>
-                <p className="font-semibold text-lg flex items-center text-success">
-                  {currency} {incomeSoFar.toLocaleString('en-IN')}
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Main big balance card */}
+          <div className="glass-panel p-8 relative overflow-hidden md:col-span-2 flex flex-col justify-between min-h-[240px]">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-5 rounded-full blur-3xl"></div>
+            <div>
+              <h2 className="text-muted text-sm font-medium mb-2 uppercase tracking-widest">{t('Net Profit (This Month)')}</h2>
+              <div className={`text-6xl font-light mb-4 flex items-center tracking-tight ${profit >= 0 ? 'text-success' : 'text-danger'}`}>
+                <span className="mr-2 text-4xl font-light opacity-50">{currency}</span>
+                {profit.toLocaleString('en-IN')}
               </div>
-              <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-gray-800 flex-1">
-                <p className="text-xs text-muted mb-1">{t('Total Expenses')}</p>
-                <p className="font-semibold text-lg flex items-center text-danger">
-                  {currency} {spentSoFar.toLocaleString('en-IN')}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="glass-panel p-6 flex flex-col justify-center items-center text-center">
-             <div className="w-16 h-16 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mb-4">
-               <Briefcase size={28} className="text-primary" />
-             </div>
-             <h3 className="font-bold text-lg mb-1">{t('Operating Budget')}</h3>
-             <p className="text-2xl font-bold mb-2">{currency}{budget.toLocaleString('en-IN')}</p>
-             <p className="text-xs text-muted">{t('Budget Remaining')}: {currency}{remainingBudget.toLocaleString('en-IN')}</p>
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="glass-panel p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-accent opacity-10 rounded-full blur-3xl"></div>
-            <h2 className="text-muted text-sm font-medium mb-1 uppercase tracking-wider">{t('Remaining Budget')}</h2>
-            <div className="text-4xl font-bold mb-4 flex items-center">
-              <span className="mr-1">{currency}</span>
-              {remainingBudget.toLocaleString('en-IN')}
             </div>
             
-            <div className="flex justify-between items-center bg-black bg-opacity-40 p-4 rounded-xl border border-gray-800">
+            <div className="flex gap-12 mt-auto pt-8 border-t border-gray-800 border-opacity-50">
               <div>
-                <p className="text-xs text-muted mb-1">{t('Safe to spend today')}</p>
-                <p className="font-semibold text-xl text-accent flex items-center">
-                  {currency} {Math.max(0, dailyLimit)}
+                <p className="text-xs text-muted mb-1 uppercase tracking-wider">{t('Total Revenue')}</p>
+                <p className="font-medium text-2xl text-success flex items-center">
+                  {currency}{incomeSoFar.toLocaleString('en-IN')}
                 </p>
               </div>
-              <div className="text-right">
-                <p className="text-xs text-muted mb-1">{remainingDays} {t('days left')}</p>
-                <p className="text-sm font-medium text-gray-300">{t('Out of')} {currency}{budget}</p>
+              <div>
+                <p className="text-xs text-muted mb-1 uppercase tracking-wider">{t('Total Expenses')}</p>
+                <p className="font-medium text-2xl text-danger flex items-center">
+                  {currency}{spentSoFar.toLocaleString('en-IN')}
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="glass-panel p-5 flex flex-col justify-center group hover:bg-gray-800 transition-colors">
-              <div className="flex items-center text-danger mb-2">
-                <div className="p-2 rounded-full bg-red-500 bg-opacity-20 mr-2"><ArrowDownRight size={16} /></div>
-                <span className="text-sm font-medium uppercase tracking-wider text-muted group-hover:text-gray-300 transition-colors">{t('Spent')}</span>
-              </div>
-              <p className="text-2xl font-bold">{currency}{spentSoFar.toLocaleString('en-IN')}</p>
+          {/* Small side cards */}
+          <div className="flex flex-col gap-6">
+            <div className="glass-panel p-6 flex-1 flex flex-col justify-center text-center group hover:bg-gray-900 transition-colors">
+               <div className="w-12 h-12 rounded-full border border-gray-700 mx-auto flex items-center justify-center mb-4">
+                 <Briefcase size={20} className="text-primary" />
+               </div>
+               <h3 className="font-medium text-xs uppercase tracking-widest text-muted mb-2">{t('Operating Budget')}</h3>
+               <p className="text-3xl font-light mb-1">{currency}{budget.toLocaleString('en-IN')}</p>
             </div>
-            <div className="glass-panel p-5 flex flex-col justify-center group hover:bg-gray-800 transition-colors">
-              <div className="flex items-center text-success mb-2">
-                <div className="p-2 rounded-full bg-green-500 bg-opacity-20 mr-2"><ArrowUpRight size={16} /></div>
-                <span className="text-sm font-medium uppercase tracking-wider text-muted group-hover:text-gray-300 transition-colors">{t('Earned')}</span>
+            <div className="glass-panel p-6 flex-1 flex flex-col justify-center text-center group hover:bg-gray-900 transition-colors">
+               <h3 className="font-medium text-xs uppercase tracking-widest text-muted mb-2">{t('Budget Remaining')}</h3>
+               <p className="text-3xl font-light text-accent">{currency}{remainingBudget.toLocaleString('en-IN')}</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Main big balance card */}
+          <div className="glass-panel p-8 relative overflow-hidden md:col-span-2 flex flex-col justify-between min-h-[240px]">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-5 rounded-full blur-3xl"></div>
+            <div>
+              <h2 className="text-muted text-sm font-medium mb-2 uppercase tracking-widest">{t('Available Balance')}</h2>
+              <div className="text-6xl font-light mb-4 flex items-center tracking-tight">
+                <span className="mr-2 text-4xl text-gray-500 font-light">{currency}</span>
+                {remainingBudget.toLocaleString('en-IN')}
               </div>
-              <p className="text-2xl font-bold">{currency}{incomeSoFar.toLocaleString('en-IN')}</p>
+            </div>
+            
+            <div className="flex gap-12 mt-auto pt-8 border-t border-gray-800 border-opacity-50">
+              <div>
+                <p className="text-xs text-muted mb-1 uppercase tracking-wider">{t('Safe to spend today')}</p>
+                <p className="font-medium text-2xl text-accent flex items-center">
+                  {currency}{Math.max(0, dailyLimit)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-muted mb-1 uppercase tracking-wider">{t('Days left')}</p>
+                <p className="font-medium text-2xl text-gray-300">
+                  {remainingDays} <span className="text-sm text-gray-600 ml-1">/ {daysInMonth}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Small side cards */}
+          <div className="flex flex-col gap-6">
+            <div className="glass-panel p-6 flex-1 flex flex-col justify-center group hover:bg-gray-900 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-medium uppercase tracking-widest text-muted">{t('Total Spent')}</span>
+                <div className="p-2 rounded-full border border-gray-800 text-danger"><ArrowDownRight size={16} /></div>
+              </div>
+              <p className="text-3xl font-light">{currency}{spentSoFar.toLocaleString('en-IN')}</p>
+            </div>
+            <div className="glass-panel p-6 flex-1 flex flex-col justify-center group hover:bg-gray-900 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-medium uppercase tracking-widest text-muted">{t('Total Earned')}</span>
+                <div className="p-2 rounded-full border border-gray-800 text-success"><ArrowUpRight size={16} /></div>
+              </div>
+              <p className="text-3xl font-light">{currency}{incomeSoFar.toLocaleString('en-IN')}</p>
             </div>
           </div>
         </div>
       )}
 
       {/* Recent Transactions list */}
-      <div>
-        <h3 className="text-xl font-bold mb-4">{t('Recent Transactions')}</h3>
-        <div className="glass-panel overflow-hidden p-2">
-          {expenses.slice(0, 5).map((exp, i) => (
-            <div key={exp.id} className="p-4 border-b border-gray-800 last:border-0 flex justify-between items-center hover:bg-gray-800 hover:bg-opacity-50 transition-colors rounded-lg">
+      <div className="mb-20">
+        <div className="flex justify-between items-end mb-6">
+          <h3 className="text-xl font-light tracking-wide">{t('Recent Transactions')}</h3>
+        </div>
+        <div className="glass-panel overflow-hidden">
+          {expenses.slice(0, 10).map((exp, i) => (
+            <div key={exp.id} className="p-6 border-b border-gray-800 border-opacity-50 last:border-0 flex justify-between items-center hover:bg-black hover:bg-opacity-20 transition-colors">
               <div>
-                <p className="font-medium text-lg">{exp.description}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`badge ${exp.type === 'income' ? 'badge-success' : 'badge-primary'}`}>{exp.category}</span>
-                  {isBusiness && exp.invoiceNumber && <span className="text-xs text-muted bg-gray-900 px-2 py-1 rounded">Inv: {exp.invoiceNumber}</span>}
-                  <span className="text-xs text-muted">{new Date(exp.date).toLocaleDateString()}</span>
+                <p className="font-medium text-lg mb-1.5">{exp.description}</p>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className={`w-1.5 h-1.5 rounded-full ${exp.type === 'income' ? 'bg-success' : 'bg-primary'}`}></div>
+                    <span className="text-xs text-muted uppercase tracking-wider">{t(exp.category)}</span>
+                  </div>
+                  <span className="text-xs text-gray-600 px-3 border-l border-gray-800">{new Date(exp.date).toLocaleDateString()}</span>
+                  {isBusiness && exp.invoiceNumber && <span className="text-xs text-muted uppercase tracking-wider px-3 border-l border-gray-800">INV: {exp.invoiceNumber}</span>}
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className={`text-xl font-bold ${exp.type === 'expense' ? 'text-danger' : 'text-success'}`}>
+              <div className="flex items-center gap-6">
+                <div className={`text-2xl font-light tracking-wide ${exp.type === 'expense' ? 'text-danger' : 'text-success'}`}>
                   {exp.type === 'expense' ? '-' : '+'}{currency}{exp.amount}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity md:opacity-100">
                   <button 
                     onClick={() => {
                       setEditingId(exp.id);
@@ -203,7 +225,7 @@ export default function Dashboard() {
                       });
                       setShowAddModal(true);
                     }}
-                    className="p-1.5 text-muted hover:text-blue-400 hover:bg-gray-700 rounded transition-colors"
+                    className="p-2 text-gray-500 hover:text-primary rounded-full hover:bg-gray-800 transition-colors"
                   >
                     <Edit2 size={16} />
                   </button>
@@ -213,7 +235,7 @@ export default function Dashboard() {
                         deleteExpense(exp.id);
                       }
                     }}
-                    className="p-1.5 text-muted hover:text-red-400 hover:bg-gray-700 rounded transition-colors"
+                    className="p-2 text-gray-500 hover:text-danger rounded-full hover:bg-gray-800 transition-colors"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -222,7 +244,7 @@ export default function Dashboard() {
             </div>
           ))}
           {expenses.length === 0 && (
-            <div className="p-10 text-center text-muted border border-dashed border-gray-700 rounded-xl m-2">
+            <div className="p-16 text-center text-muted">
               {t('No transactions this month. Click the Add button to start!')}
             </div>
           )}
@@ -231,9 +253,9 @@ export default function Dashboard() {
 
       {/* Add Transaction Modal */}
       {showAddModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="glass-panel-no-hover p-8 w-full max-w-md animate-fade-up">
-            <h2 className="text-2xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-panel p-10 w-full max-w-md animate-fade-up border border-gray-700">
+            <h2 className="text-2xl font-light tracking-wide mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] to-[#fcfcfc]">
               {editingId ? t('Update Transaction') : (
                 <>{t('New')} {isBusiness ? t('Business') : t('Personal')} {t('Transaction')}</>
               )}

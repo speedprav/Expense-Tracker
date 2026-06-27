@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 export const generatePDFReport = (expenses, profile, timeframe) => {
   const doc = new jsPDF();
@@ -59,7 +59,7 @@ export const generatePDFReport = (expenses, profile, timeframe) => {
   doc.setTextColor(0, 0, 0);
   doc.text('Financial Summary', 14, 65);
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: 70,
     head: [['Total Income', 'Total Expenses', 'Net Balance']],
     body: [
@@ -85,19 +85,19 @@ export const generatePDFReport = (expenses, profile, timeframe) => {
   ]);
 
   if (tableData.length > 0) {
-    doc.autoTable({
+    autoTable(doc, {
       startY: finalY + 20,
       head: [['Date', 'Description', 'Category', 'Type', 'Amount']],
       body: tableData,
       theme: 'striped',
-      headStyles: { fillColor: [139, 92, 246] },
+      headStyles: { fillColor: [212, 175, 55] }, // Updated to gold
       styles: { fontSize: 10 },
       didParseCell: function(data) {
         if (data.section === 'body' && data.column.index === 4) {
           if (data.cell.raw.includes('-')) {
-            data.cell.styles.textColor = [220, 38, 38]; // Red for expenses
+            data.cell.styles.textColor = [239, 68, 68]; // Red for expenses
           } else {
-            data.cell.styles.textColor = [22, 163, 74]; // Green for income
+            data.cell.styles.textColor = [16, 185, 129]; // Green for income
           }
         }
       }
