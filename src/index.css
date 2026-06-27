@@ -1,28 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Premium Luxury Dark Theme */
-  --bg-dark: #030305;
-  --bg-card: rgba(18, 18, 20, 0.3);
-  --bg-card-hover: rgba(28, 28, 30, 0.5);
+  /* Exact Mockup Dark Theme */
+  --bg-dark: #111319;
+  --bg-sidebar: #13141a;
+  --bg-card: #181a24;
+  --bg-card-hover: #1e212c;
   
-  --text-main: #fcfcfc;
-  --text-muted: #9ca3af;
+  --text-main: #ffffff;
+  --text-muted: #8b92a5;
   
-  /* Elegant Metallic Accents */
-  --primary: #d4af37; /* Champagne Gold */
-  --primary-glow: rgba(212, 175, 55, 0.15);
+  /* Mockup Neon Accents */
+  --primary: #fbc02d; /* Yellow */
+  --primary-glow: rgba(251, 192, 45, 0.15);
   
-  --accent: #e5e7eb; /* Platinum */
-  --accent-glow: rgba(229, 231, 235, 0.1);
+  --accent: #a78bfa; /* Purple for icons */
+  --accent-glow: rgba(167, 139, 250, 0.1);
   
-  --success: #10b981; /* Emerald */
-  --success-glow: rgba(16, 185, 129, 0.1);
+  --success: #22c55e; /* Green */
+  --success-glow: rgba(34, 197, 94, 0.15);
   
-  --danger: #ef4444; /* Rose */
-  --danger-glow: rgba(239, 68, 68, 0.1);
+  --danger: #ef4444; /* Red */
+  --danger-glow: rgba(239, 68, 68, 0.15);
   
-  --warning: #fbbf24;
+  --warning: #f59e0b; /* Orange */
   
   /* Ultra-thin glass borders */
   --glass-border: 1px solid rgba(255, 255, 255, 0.03);
@@ -52,13 +53,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
-  /* Subtle luxury animated gradient background */
-  background: 
-    radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 85% 30%, rgba(229, 231, 235, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.02) 0%, transparent 40%);
   background-color: var(--bg-dark);
-  background-attachment: fixed;
 }
 
 /* Premium Glassmorphism */
@@ -165,15 +160,17 @@ h1, h2, h3, h4 { font-weight: 400; letter-spacing: 0.02em; }
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.9), rgba(184, 134, 11, 0.9));
-  color: #030305;
+  background: var(--primary);
+  color: #111319;
   box-shadow: 0 4px 15px var(--primary-glow);
+  border-radius: 8px;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
-  background: linear-gradient(135deg, rgba(212, 175, 55, 1), rgba(184, 134, 11, 1));
+  box-shadow: 0 6px 20px rgba(251, 192, 45, 0.3);
+  background: #facc15;
 }
 
 .btn-outline {
