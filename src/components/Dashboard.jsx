@@ -36,6 +36,7 @@ export default function Dashboard() {
 
   const spentSoFar = monthlyExpenses.reduce((acc, curr) => curr.type === 'expense' ? acc + Number(curr.amount) : acc, 0);
   const incomeSoFar = monthlyExpenses.reduce((acc, curr) => curr.type === 'income' ? acc + Number(curr.amount) : acc, 0);
+  const netExpense = spentSoFar - incomeSoFar;
 
   const budget = profile.monthlyBudget || 10000;
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -133,7 +134,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
         
         {/* Premium Black Card (Remaining Budget) */}
-        <div className="md:col-span-6 glass-card rounded-3xl p-8 relative overflow-hidden group">
+        <div className="md:col-span-12 lg:col-span-12 glass-card rounded-3xl p-8 relative overflow-hidden group">
           {/* Card Shine Effect */}
           <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rotate-12 scale-150 transform translate-x-[-100%] group-hover:translate-x-[100%] pointer-events-none"></div>
           
@@ -176,7 +177,7 @@ export default function Dashboard() {
         </div>
 
         {/* Spent */}
-        <div className="md:col-span-3 glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
+        <div className="md:col-span-4 glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
           <div className="absolute -right-10 -top-10 w-32 h-32 bg-red-500/10 rounded-full blur-3xl group-hover:bg-red-500/20 transition-all"></div>
           <div>
             <div className="flex items-center gap-2 text-gray-400 mb-4">
@@ -203,7 +204,7 @@ export default function Dashboard() {
         </div>
 
         {/* Earned */}
-        <div className="md:col-span-3 glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
+        <div className="md:col-span-4 glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
           <div className="absolute -right-10 -top-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all"></div>
           <div>
             <div className="flex items-center gap-2 text-gray-400 mb-4">
@@ -226,6 +227,33 @@ export default function Dashboard() {
           <div className="flex justify-between items-center text-xs">
             <span className="text-gray-500">{t('This month')}</span>
             <span className="bg-green-500/10 border border-green-500/20 text-green-400 px-2 py-1 rounded-md font-medium">+0%</span>
+          </div>
+        </div>
+
+        {/* Total Expense */}
+        <div className="md:col-span-4 glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all"></div>
+          <div>
+            <div className="flex items-center gap-2 text-gray-400 mb-4">
+              <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
+                <Briefcase size={16} />
+              </div>
+              <span className="font-medium text-sm tracking-wide uppercase">{t('Total Expense')}</span>
+            </div>
+            <h2 className="text-3xl font-light mb-4">{currency}{netExpense.toLocaleString('en-IN')}</h2>
+          </div>
+          
+          <div className="h-20 w-full mt-auto mb-4 relative -mx-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={sparklineData1}>
+                <Line type="monotone" dataKey="v" stroke="#3b82f6" strokeWidth={3} dot={false} style={{ filter: 'drop-shadow(0px 8px 8px rgba(59, 130, 246, 0.4))' }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-gray-500">{t('This month')}</span>
+            <span className="bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-1 rounded-md font-medium">Net</span>
           </div>
         </div>
       </div>
