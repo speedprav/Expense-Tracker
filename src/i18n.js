@@ -60,8 +60,9 @@ const resources = {
       
       // Common
       "Yes": "Yes",
-      "No": "No"
-// Auth & Google
+      "No": "No",
+      
+      // Auth & Google
       "or": "or",
       "Sign in with Google": "Sign in with Google",
       
