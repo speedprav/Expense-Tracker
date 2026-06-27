@@ -19,7 +19,8 @@ export default function Dashboard() {
     category: isBusiness ? 'Inventory' : 'Food', 
     description: '', 
     type: 'expense',
-    invoiceNumber: '' 
+    invoiceNumber: '',
+    date: new Date().toISOString().split('T')[0]
   });
 
   const currentMonth = new Date().getMonth();
@@ -46,17 +47,20 @@ export default function Dashboard() {
     e.preventDefault();
     if (!newExpense.amount) return;
     
+    const expenseDate = newExpense.date ? new Date(newExpense.date).toISOString() : new Date().toISOString();
+
     if (editingId) {
       updateExpense(editingId, {
         ...newExpense,
-        amount: Number(newExpense.amount)
+        amount: Number(newExpense.amount),
+        date: expenseDate
       });
       setEditingId(null);
     } else {
       addExpense({
         ...newExpense,
         amount: Number(newExpense.amount),
-        date: new Date().toISOString()
+        date: expenseDate
       });
     }
     
@@ -116,7 +120,7 @@ export default function Dashboard() {
           className="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full border border-white/10 backdrop-blur-md transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:scale-105"
           onClick={() => {
             setEditingId(null);
-            setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '' });
+            setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '', date: new Date().toISOString().split('T')[0] });
             setShowAddModal(true);
           }}
         >
@@ -362,7 +366,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-4 gap-4">
               <button onClick={() => {
                 setEditingId(null);
-                setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '' });
+                setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '', date: new Date().toISOString().split('T')[0] });
                 setShowAddModal(true);
               }} className="flex flex-col items-center gap-3 group">
                 <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/5 text-gray-300 flex items-center justify-center group-hover:bg-white/10 group-hover:scale-105 group-hover:text-white transition-all shadow-lg">
@@ -373,7 +377,7 @@ export default function Dashboard() {
               
               <button onClick={() => {
                 setEditingId(null);
-                setNewExpense({ amount: '', category: 'Salary', description: '', type: 'income', invoiceNumber: '' });
+                setNewExpense({ amount: '', category: 'Salary', description: '', type: 'income', invoiceNumber: '', date: new Date().toISOString().split('T')[0] });
                 setShowAddModal(true);
               }} className="flex flex-col items-center gap-3 group">
                 <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/5 text-gray-300 flex items-center justify-center group-hover:bg-white/10 group-hover:scale-105 group-hover:text-white transition-all shadow-lg">
@@ -406,7 +410,7 @@ export default function Dashboard() {
         className="md:hidden fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-r from-yellow-500 to-yellow-300 text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.5)] z-40 hover:scale-110 transition-transform"
         onClick={() => {
           setEditingId(null);
-          setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '' });
+          setNewExpense({ amount: '', category: isBusiness ? 'Inventory' : 'Food', description: '', type: 'expense', invoiceNumber: '', date: new Date().toISOString().split('T')[0] });
           setShowAddModal(true);
         }}
       >
@@ -453,6 +457,13 @@ export default function Dashboard() {
                   ))}
                   <option value="Other" className="bg-gray-900">{t('Other')}</option>
                 </select>
+              </div>
+
+              <div className="flex flex-col gap-2 mb-8">
+                <label className="text-xs text-gray-400 font-medium uppercase tracking-wider">{t('Date')}</label>
+                <input type="date" required className="bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white outline-none focus:border-yellow-500/50 focus:bg-black/60 transition-all shadow-inner [color-scheme:dark]" 
+                       value={newExpense.date ? new Date(newExpense.date).toISOString().split('T')[0] : ''} 
+                       onChange={e => setNewExpense({...newExpense, date: e.target.value})} />
               </div>
               
               <div className="flex gap-4">
