@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
+import { ArrowLeft } from 'lucide-react';
 
-export default function Auth() {
+export default function Auth({ onCancel }) {
   const { login, signup } = useAppContext();
   const [isLogin, setIsLogin] = useState(true);
   
@@ -33,7 +34,12 @@ export default function Auth() {
 
   return (
     <div className="flex items-center justify-center py-10" style={{ minHeight: '100vh', padding: '1rem' }}>
-      <div className="glass-panel p-8 w-full max-w-md animate-fade-up">
+      <div className="glass-panel p-8 w-full max-w-md animate-fade-up relative">
+        {onCancel && (
+          <button onClick={onCancel} className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
+            <ArrowLeft size={20} />
+          </button>
+        )}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 text-primary">Expensr</h1>
           <p className="text-muted">

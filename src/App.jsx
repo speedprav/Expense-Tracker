@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { Home, PieChart, Users, Settings, Calendar, LogOut } from 'lucide-react';
 import { AppProvider, useAppContext } from './context/AppContext';
 import Auth from './components/Auth';
+import Landing from './components/Landing';
 import Dashboard from './components/Dashboard';
 import Analytics from './components/Analytics';
 import Ledger from './components/Ledger';
@@ -58,9 +59,13 @@ function Navigation({ onOpenCalendar }) {
 function MainLayout() {
   const { user } = useAppContext();
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
   if (!user) {
-    return <Auth />;
+    if (showAuth) {
+      return <Auth onCancel={() => setShowAuth(false)} />;
+    }
+    return <Landing onLaunch={() => setShowAuth(true)} />;
   }
 
   return (
