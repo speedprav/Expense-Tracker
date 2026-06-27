@@ -1,16 +1,3 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Home, PieChart, Users, Settings, Calendar, LogOut } from 'lucide-react';
-import { AppProvider, useAppContext } from './context/AppContext';
-import Auth from './components/Auth';
-import Landing from './components/Landing';
-import Dashboard from './components/Dashboard';
-import Analytics from './components/Analytics';
-import Ledger from './components/Ledger';
-import Profile from './components/Profile';
-import CalendarModal from './components/CalendarModal';
-import { useTranslation } from 'react-i18next';
-
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Home, PieChart, Users, Settings, Calendar, LogOut, Bell, Moon, Search, Camera, Menu, Crown, ArrowUpRight } from 'lucide-react';
