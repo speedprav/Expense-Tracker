@@ -70,32 +70,7 @@ function Sidebar({ onOpenCalendar, onCloseMobileSidebar }) {
         </Link>
       </nav>
 
-      <div className="mt-auto pt-6 space-y-4">
-        {/* Go Premium Card */}
-        <div className="glass-card p-4 rounded-2xl text-center relative overflow-hidden bg-gradient-to-br from-purple-900/40 to-indigo-900/20">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500/30 blur-2xl rounded-full"></div>
-          <Crown size={24} className="text-yellow-400 mx-auto mb-2" />
-          <h4 className="font-bold text-white text-sm mb-1">{t('Go Premium')}</h4>
-          <p className="text-xs text-gray-400 mb-4">{t('Unlock advanced insights, custom categories and more.')}</p>
-          <button className="w-full bg-white text-black hover:bg-gray-200 text-xs font-semibold py-2 rounded-lg transition-colors shadow-[0_4px_15px_rgba(255,255,255,0.2)]">
-            {t('Upgrade Now')}
-          </button>
-        </div>
 
-        {/* Need Help */}
-        <div className="flex items-center justify-between px-2 py-2 cursor-pointer group">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/5 flex items-center justify-center text-gray-400 group-hover:text-white group-hover:bg-white/20 transition-all shadow-inner">
-              <span className="text-xs">?</span>
-            </div>
-            <div>
-              <p className="text-xs text-white font-medium">{t('Need Help?')}</p>
-              <p className="text-[10px] text-gray-400">{t('Contact Support')}</p>
-            </div>
-          </div>
-          <ArrowUpRight size={14} className="text-gray-500 group-hover:text-white transition-colors" />
-        </div>
-      </div>
     </div>
   );
 }
