@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { ArrowLeft } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 export default function Auth({ onCancel }) {
-  const { t, i18n } = useTranslation();
   const { login, signup, loginWithGoogle } = useAppContext();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -37,10 +35,7 @@ export default function Auth({ onCancel }) {
         currency,
         language
       });
-      if (result.success) {
-        // Change language instantly on signup
-        i18n.changeLanguage(language);
-      }
+      // Removing instant language change since the app itself will check profile.language after login
     }
     
     if (!result.success) {
@@ -70,7 +65,7 @@ export default function Auth({ onCancel }) {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 text-primary">Expensr</h1>
           <p className="text-muted">
-            {isLogin ? t('Welcome back! Please login.') : t('Create your account and setup your profile.')}
+            {isLogin ? 'Welcome back! Please login.' : 'Create your account and setup your profile.'}
           </p>
         </div>
 
@@ -84,7 +79,7 @@ export default function Auth({ onCancel }) {
           {!isLogin && (
             <>
               <div className="form-group mb-4">
-                <label className="form-label">{t('Full Name')}</label>
+                <label className="form-label">Full Name</label>
                 <input 
                   type="text" 
                   className="form-input" 
@@ -96,22 +91,22 @@ export default function Auth({ onCancel }) {
               </div>
 
               <div className="form-group mb-4">
-                <label className="form-label">{t('Account Mode')}</label>
+                <label className="form-label">Account Mode</label>
                 <div className="flex gap-4">
                   <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-all text-center ${mode === 'student' ? 'border-primary bg-primary bg-opacity-20 text-white' : 'border-gray-700 text-muted hover:border-gray-500'}`}>
                     <input type="radio" name="mode" value="student" className="hidden" checked={mode === 'student'} onChange={() => setMode('student')} />
-                    {t('Personal')}
+                    Personal
                   </label>
                   <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-all text-center ${mode === 'business' ? 'border-accent bg-accent bg-opacity-20 text-white' : 'border-gray-700 text-muted hover:border-gray-500'}`}>
                     <input type="radio" name="mode" value="business" className="hidden" checked={mode === 'business'} onChange={() => setMode('business')} />
-                    {t('Business')}
+                    Business
                   </label>
                 </div>
               </div>
 
               <div className="flex gap-4 mb-4">
                 <div className="form-group flex-1 mb-0">
-                  <label className="form-label">{t('Currency')}</label>
+                  <label className="form-label">Currency</label>
                   <select className="form-select" value={currency} onChange={(e) => setCurrency(e.target.value)}>
                     <option value="₹">₹ (INR)</option>
                     <option value="$">$ (USD)</option>
@@ -120,7 +115,7 @@ export default function Auth({ onCancel }) {
                   </select>
                 </div>
                 <div className="form-group flex-1 mb-0">
-                  <label className="form-label">{t('Language')}</label>
+                  <label className="form-label">Language</label>
                   <select className="form-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
                     <option value="English">English</option>
                     <option value="Hindi">Hindi</option>
@@ -132,7 +127,7 @@ export default function Auth({ onCancel }) {
           )}
 
           <div className="form-group mb-4">
-            <label className="form-label">{t('Email Address')}</label>
+            <label className="form-label">Email Address</label>
             <input 
               type="email" 
               className="form-input" 
@@ -143,7 +138,7 @@ export default function Auth({ onCancel }) {
             />
           </div>
           <div className="form-group mb-6">
-            <label className="form-label">{t('Password')}</label>
+            <label className="form-label">Password</label>
             <input 
               type="password" 
               className="form-input" 
@@ -155,12 +150,12 @@ export default function Auth({ onCancel }) {
           </div>
 
           <button type="submit" disabled={loading} className="btn btn-primary w-full mb-4 shadow-neon disabled:opacity-50">
-            {loading ? '...' : (isLogin ? t('Sign In') : t('Create Account'))}
+            {loading ? '...' : (isLogin ? 'Sign In' : 'Create Account')}
           </button>
 
           <div className="relative flex py-4 items-center">
             <div className="flex-grow border-t border-gray-700"></div>
-            <span className="flex-shrink-0 mx-4 text-muted text-sm">{t('or')}</span>
+            <span className="flex-shrink-0 mx-4 text-muted text-sm">or</span>
             <div className="flex-grow border-t border-gray-700"></div>
           </div>
 
@@ -178,18 +173,18 @@ export default function Auth({ onCancel }) {
                 <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/>
               </g>
             </svg>
-            {t('Sign in with Google')}
+            Sign in with Google
           </button>
         </form>
 
         <p className="text-center text-sm text-muted mt-4">
-          {isLogin ? t("Don't have an account? ") : t("Already have an account? ")}
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
           <button 
             type="button" 
-            className="text-primary hover:underline cursor-pointer bg-transparent border-none font-bold"
+            className="text-primary hover:underline cursor-pointer bg-transparent border-none font-bold ml-1"
             onClick={() => { setIsLogin(!isLogin); setError(''); }}
           >
-            {isLogin ? t('Sign up') : t('Log in')}
+            {isLogin ? 'Sign up' : 'Log in'}
           </button>
         </p>
       </div>

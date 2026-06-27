@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Apple, QrCode } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 export default function Landing({ onLaunch }) {
-  const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
@@ -26,9 +24,9 @@ export default function Landing({ onLaunch }) {
       };
 
       if (isIos()) {
-        alert(t("To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'."));
+        alert("To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'.");
       } else {
-        alert(t("The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!"));
+        alert("The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!");
       }
       return;
     }
@@ -71,7 +69,7 @@ export default function Landing({ onLaunch }) {
           onMouseOver={(e) => e.currentTarget.style.color = 'white'}
           onMouseOut={(e) => e.currentTarget.style.color = '#a1a1aa'}
         >
-          {t('Log In / Launch Web App')}
+          Log In / Launch Web App
         </button>
       </div>
 
@@ -136,8 +134,8 @@ export default function Landing({ onLaunch }) {
               marginBottom: '1.5rem',
               margin: '0 0 1.5rem 0'
             }}>
-              <span style={{ display: 'block', color: 'white', marginBottom: '0.5rem' }}>{t('Download the')}</span>
-              <span style={{ display: 'block', color: '#d9b775' }}>{t('Expensr Copilot™')}</span>
+              <span style={{ display: 'block', color: 'white', marginBottom: '0.5rem' }}>Download the</span>
+              <span style={{ display: 'block', color: '#d9b775' }}>Expensr Copilot™</span>
             </h1>
             
             {/* Subtext */}
@@ -148,7 +146,7 @@ export default function Landing({ onLaunch }) {
               marginBottom: '3rem',
               lineHeight: 1.6
             }}>
-              {t('Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.')}
+              Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.
             </p>
 
             {/* Buttons & QR */}
@@ -177,10 +175,10 @@ export default function Landing({ onLaunch }) {
                   <Apple size={28} color="black" fill="black" />
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.05em', marginBottom: '2px', color: '#374151' }}>
-                      {isInstallable ? t('FAST & SECURE') : t('ADD TO HOMESCREEN')}
+                      {isInstallable ? 'FAST & SECURE' : 'ADD TO HOMESCREEN'}
                     </div>
                     <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
-                      {t('Install App')}
+                      Install App
                     </div>
                   </div>
                 </button>
@@ -211,10 +209,10 @@ export default function Landing({ onLaunch }) {
                   </svg>
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.05em', marginBottom: '2px', color: '#a1a1aa' }}>
-                      {t('DIRECT DOWNLOAD')}
+                      DIRECT DOWNLOAD
                     </div>
                     <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
-                      {t('Download APK')}
+                      Download APK
                     </div>
                   </div>
                 </a>
@@ -237,7 +235,7 @@ export default function Landing({ onLaunch }) {
             </div>
 
             <div style={{ marginTop: '5rem', fontSize: '11px', color: '#71717a' }}>
-              {t('© Copyright 2026 Expensr Inc. — All rights reserved.')}
+              © Copyright 2026 Expensr Inc. — All rights reserved.
             </div>
           </div>
 
