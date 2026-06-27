@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Plus, User, ArrowUpRight, ArrowDownRight, History, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Ledger() {
+  const { t } = useTranslation();
   const { people, addPerson, updatePersonBalance, profile } = useAppContext();
   const currency = profile.currency || '₹';
   const [showAddModal, setShowAddModal] = useState(false);
@@ -66,11 +68,11 @@ export default function Ledger() {
     <div className="container animate-fade-in mb-20">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2">Debt Ledger</h1>
-          <p className="text-muted">Keep track of who owes who</p>
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2">{t('Shared Ledger')}</h1>
+          <p className="text-muted">{t('Keep track of who owes who')}</p>
         </div>
         <button className="btn btn-primary shadow-neon" onClick={() => setShowAddModal(true)}>
-          <Plus size={18} /> Add Person
+          <Plus size={18} /> {t('Add Person')}
         </button>
       </div>
 
@@ -89,7 +91,7 @@ export default function Ledger() {
               <button 
                 onClick={() => openHistory(person)}
                 className="p-2 bg-gray-800 bg-opacity-50 hover:bg-gray-700 rounded-full text-muted transition-colors"
-                title="View History"
+                title={t('View History')}
               >
                 <History size={18} />
               </button>
@@ -97,7 +99,7 @@ export default function Ledger() {
             
             <div className="mb-6">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
-                {person.balance > 0 ? "Owes you:" : person.balance < 0 ? "You owe them:" : "Settled up"}
+                {person.balance > 0 ? t("Owes you:") : person.balance < 0 ? t("You owe them:") : t("Settled up")}
               </p>
               <p className={`text-3xl font-bold ${person.balance > 0 ? 'text-success' : person.balance < 0 ? 'text-danger' : 'text-gray-400'}`}>
                 {currency}{Math.abs(person.balance).toLocaleString('en-IN')}
@@ -109,13 +111,13 @@ export default function Ledger() {
                 className="btn btn-outline flex-1 text-sm py-2"
                 onClick={() => { setSelectedPerson(person); setTxType('give'); setShowTxModal(true); }}
               >
-                <ArrowUpRight size={16} /> I Gave
+                <ArrowUpRight size={16} /> {t('I Gave')}
               </button>
               <button 
                 className="btn btn-outline flex-1 text-sm py-2"
                 onClick={() => { setSelectedPerson(person); setTxType('take'); setShowTxModal(true); }}
               >
-                <ArrowDownRight size={16} /> I Took
+                <ArrowDownRight size={16} /> {t('I Took')}
               </button>
             </div>
           </div>
@@ -123,8 +125,8 @@ export default function Ledger() {
         {people.length === 0 && (
           <div className="col-span-full text-center p-12 text-muted border border-dashed border-gray-800 rounded-2xl glass-panel-no-hover">
             <User size={48} className="mx-auto mb-4 opacity-20" />
-            <p className="text-lg">No people added yet.</p>
-            <p className="text-sm">Add someone to start tracking debts.</p>
+            <p className="text-lg">{t('No people added yet')}</p>
+            <p className="text-sm">{t('Add someone to start tracking debts.')}</p>
           </div>
         )}
       </div>
@@ -133,26 +135,26 @@ export default function Ledger() {
       {showAddModal && (
         <div className="modal-overlay animate-fade-up">
           <div className="glass-panel-no-hover p-8 w-full max-w-sm relative">
-            <h2 className="text-2xl font-bold mb-6 text-white">Add Person</h2>
+            <h2 className="text-2xl font-bold mb-6 text-white">{t('Add Person')}</h2>
             <form onSubmit={handleAddPerson}>
               <div className="form-group mb-6">
-                <label className="form-label">Name</label>
+                <label className="form-label">{t('Name')}</label>
                 <input type="text" required className="form-input" value={newPersonName} onChange={e => { setNewPersonName(e.target.value); setDuplicatePerson(null); }} placeholder="e.g. John Doe" />
               </div>
               
               {duplicatePerson && (
                 <div className="mb-6 p-4 bg-yellow-500 bg-opacity-10 border border-yellow-500 border-opacity-30 rounded-xl">
-                  <p className="text-warning text-sm font-bold mb-2">This person already exists!</p>
-                  <p className="text-xs text-gray-300 mb-3">"{duplicatePerson.name}" is already in your ledger. Would you like to add a transaction for them instead?</p>
+                  <p className="text-warning text-sm font-bold mb-2">{t('This person already exists!')}</p>
+                  <p className="text-xs text-gray-300 mb-3">"{duplicatePerson.name}" {t('is already in your ledger. Would you like to add a transaction for them instead?')}</p>
                   <button type="button" onClick={openTransactionForExisting} className="btn w-full bg-yellow-500 bg-opacity-20 hover:bg-opacity-30 text-warning text-sm py-2">
-                    Add Transaction to {duplicatePerson.name}
+                    {t('Add Transaction to')} {duplicatePerson.name}
                   </button>
                 </div>
               )}
 
               <div className="flex gap-4">
-                <button type="button" className="btn btn-outline flex-1" onClick={() => { setShowAddModal(false); setDuplicatePerson(null); setNewPersonName(''); }}>Cancel</button>
-                <button type="submit" className="btn btn-primary flex-1 shadow-neon">Save</button>
+                <button type="button" className="btn btn-outline flex-1" onClick={() => { setShowAddModal(false); setDuplicatePerson(null); setNewPersonName(''); }}>{t('Cancel')}</button>
+                <button type="submit" className="btn btn-primary flex-1 shadow-neon">{t('Save')}</button>
               </div>
             </form>
           </div>
@@ -164,21 +166,21 @@ export default function Ledger() {
         <div className="modal-overlay animate-fade-up">
           <div className="glass-panel-no-hover p-8 w-full max-w-sm relative">
             <h2 className="text-2xl font-bold mb-2 text-white">
-              {txType === 'give' ? 'Gave money' : 'Took money'}
+              {txType === 'give' ? t('Gave money') : t('Took money')}
             </h2>
-            <p className="text-muted mb-6">to/from {selectedPerson.name}</p>
+            <p className="text-muted mb-6">{t('to/from')} {selectedPerson.name}</p>
             <form onSubmit={handleTransaction}>
               <div className="form-group mb-4">
-                <label className="form-label">Amount ({currency})</label>
+                <label className="form-label">{t('Amount')} ({currency})</label>
                 <input type="number" required className="form-input text-xl font-bold" value={txAmount} onChange={e => setTxAmount(e.target.value)} placeholder="0.00" />
               </div>
               <div className="form-group mb-8">
-                <label className="form-label">Description (Optional)</label>
+                <label className="form-label">{t('Description (Optional)')}</label>
                 <input type="text" className="form-input" value={txDescription} onChange={e => setTxDescription(e.target.value)} placeholder="e.g. Lunch money" />
               </div>
               <div className="flex gap-4">
-                <button type="button" className="btn btn-outline flex-1" onClick={() => setShowTxModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary flex-1 shadow-neon">Save</button>
+                <button type="button" className="btn btn-outline flex-1" onClick={() => setShowTxModal(false)}>{t('Cancel')}</button>
+                <button type="submit" className="btn btn-primary flex-1 shadow-neon">{t('Save')}</button>
               </div>
             </form>
           </div>
@@ -191,9 +193,9 @@ export default function Ledger() {
           <div className="glass-panel w-full max-w-md relative flex flex-col max-h-[85vh]">
             <div className="p-6 border-b border-gray-800 flex justify-between items-center bg-black bg-opacity-40 rounded-t-xl">
               <div>
-                <h2 className="text-xl font-bold text-white">{historyPerson.name}'s History</h2>
+                <h2 className="text-xl font-bold text-white">{historyPerson.name}{t("'s History")}</h2>
                 <p className="text-sm text-muted">
-                  Current Balance: <span className={`font-bold ${historyPerson.balance > 0 ? 'text-success' : historyPerson.balance < 0 ? 'text-danger' : 'text-gray-400'}`}>
+                  {t('Current Balance:')} <span className={`font-bold ${historyPerson.balance > 0 ? 'text-success' : historyPerson.balance < 0 ? 'text-danger' : 'text-gray-400'}`}>
                     {historyPerson.balance > 0 ? '+' : historyPerson.balance < 0 ? '-' : ''}{currency}{Math.abs(historyPerson.balance).toLocaleString('en-IN')}
                   </span>
                 </p>
@@ -206,7 +208,7 @@ export default function Ledger() {
             <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
               {!historyPerson.transactions || historyPerson.transactions.length === 0 ? (
                 <div className="text-center py-10 text-muted opacity-60">
-                  <p>No transaction history found.</p>
+                  <p>{t('No transaction history found.')}</p>
                 </div>
               ) : (
                 <div className="flex flex-col gap-3">

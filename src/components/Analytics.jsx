@@ -3,10 +3,12 @@ import { useAppContext } from '../context/AppContext';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Legend, AreaChart, Area, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { FileText, Download, ChevronDown } from 'lucide-react';
 import { generatePDFReport } from '../utils/pdfGenerator';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#ec4899'];
 
 export default function Analytics() {
+  const { t } = useTranslation();
   const { expenses, profile } = useAppContext();
   const currency = profile.currency || '₹';
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -93,8 +95,8 @@ export default function Analytics() {
     <div className="container animate-fade-in mb-20">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2">Advanced Analytics</h1>
-          <p className="text-muted">Deep dive into your financial patterns.</p>
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2">{t('Advanced Analytics')}</h1>
+          <p className="text-muted">{t('Deep dive into your financial patterns.')}</p>
         </div>
         
         <div className="relative">
@@ -102,22 +104,22 @@ export default function Analytics() {
             onClick={() => setShowExportMenu(!showExportMenu)}
             className="btn btn-primary shadow-neon flex items-center gap-2"
           >
-            <Download size={18} /> Export PDF Report <ChevronDown size={16} />
+            <Download size={18} /> {t('Export PDF Report')} <ChevronDown size={16} />
           </button>
           
           {showExportMenu && (
             <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden animate-fade-up">
               <button onClick={() => handleExport('weekly')} className="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm flex items-center gap-2 border-b border-gray-800">
-                <FileText size={16} className="text-primary" /> Weekly Report
+                <FileText size={16} className="text-primary" /> {t('Weekly Report')}
               </button>
               <button onClick={() => handleExport('monthly')} className="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm flex items-center gap-2 border-b border-gray-800">
-                <FileText size={16} className="text-accent" /> Monthly Report
+                <FileText size={16} className="text-accent" /> {t('Monthly Report')}
               </button>
               <button onClick={() => handleExport('quarterly')} className="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm flex items-center gap-2 border-b border-gray-800">
-                <FileText size={16} className="text-success" /> Quarterly Report
+                <FileText size={16} className="text-success" /> {t('Quarterly Report')}
               </button>
               <button onClick={() => handleExport('yearly')} className="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm flex items-center gap-2">
-                <FileText size={16} className="text-warning" /> Yearly Report
+                <FileText size={16} className="text-warning" /> {t('Yearly Report')}
               </button>
             </div>
           )}
@@ -127,7 +129,7 @@ export default function Analytics() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Top Left: Area Chart */}
         <div className="glass-panel p-6 col-span-1 lg:col-span-2">
-          <h3 className="text-lg font-bold mb-6 text-gray-200">Income vs Expense Trend (6 Months)</h3>
+          <h3 className="text-lg font-bold mb-6 text-gray-200">{t('Income vs Expense Trend (6 Months)')}</h3>
           <div style={{ width: '100%', height: 350 }}>
             <ResponsiveContainer>
               <AreaChart data={monthlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
@@ -145,8 +147,8 @@ export default function Analytics() {
                 <YAxis stroke="#52525b" tick={{fill: '#a1a1aa'}} />
                 <RechartsTooltip content={<CustomTooltip />} />
                 <Legend />
-                <Area type="monotone" dataKey="income" name="Income" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" />
-                <Area type="monotone" dataKey="expense" name="Expense" stroke="#f43f5e" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
+                <Area type="monotone" dataKey="income" name={t('Income')} stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" />
+                <Area type="monotone" dataKey="expense" name={t('Expense')} stroke="#f43f5e" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -154,7 +156,7 @@ export default function Analytics() {
 
         {/* Bottom Left: Donut Chart */}
         <div className="glass-panel p-6">
-          <h3 className="text-lg font-bold mb-4 text-gray-200">Expenses by Category</h3>
+          <h3 className="text-lg font-bold mb-4 text-gray-200">{t('Expenses by Category')}</h3>
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer>
               <PieChart>
@@ -178,13 +180,13 @@ export default function Analytics() {
             </ResponsiveContainer>
           </div>
           {categoryData.length === 0 && (
-            <p className="text-center text-muted mt-4">Not enough data.</p>
+            <p className="text-center text-muted mt-4">{t('Not enough data.')}</p>
           )}
         </div>
 
         {/* Bottom Right: Radar Chart */}
         <div className="glass-panel p-6">
-          <h3 className="text-lg font-bold mb-4 text-gray-200">Spending by Day of Week</h3>
+          <h3 className="text-lg font-bold mb-4 text-gray-200">{t('Spending by Day of Week')}</h3>
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer>
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={dayOfWeekData}>

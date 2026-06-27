@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Save, Download, Shield, Cloud } from 'lucide-react';
 import { backupUserData } from '../firebase';
+import { useTranslation } from 'react-i18next';
 
 export default function Profile() {
+  const { t, i18n } = useTranslation();
   const { profile, updateProfile, expenses, people, user } = useAppContext();
   
   const [name, setName] = useState(profile.name || '');
@@ -24,7 +26,16 @@ export default function Profile() {
       currency,
       language
     });
-    alert('Profile preferences saved!');
+    const langMap = { 'English': 'en', 'Hindi': 'hi', 'Spanish': 'es' };
+    i18n.changeLanguage(langMap[language] || 'en');
+    alert(t('Profile preferences saved!'));
+  };
+
+  const handleLanguageChange = (e) => {
+    const val = e.target.value;
+    setLanguage(val);
+    const langMap = { 'English': 'en', 'Hindi': 'hi', 'Spanish': 'es' };
+    i18n.changeLanguage(langMap[val] || 'en');
   };
 
   const handleExport = () => {
@@ -55,8 +66,8 @@ export default function Profile() {
   return (
     <div className="container animate-fade-in mb-20">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2">Profile & Settings</h1>
-        <p className="text-muted">Manage your account preferences and data.</p>
+        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2">{t('Profile & Settings')}</h1>
+        <p className="text-muted">{t('Manage your account preferences and data.')}</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -69,16 +80,16 @@ export default function Profile() {
                 {profile.name ? profile.name.substring(0, 1).toUpperCase() : (user?.email ? user.email.substring(0, 1).toUpperCase() : 'U')}
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-1">{profile.name || user?.email || 'Local User'}</h2>
+                <h2 className="text-2xl font-bold text-white mb-1">{profile.name || user?.email || t('Local User')}</h2>
                 <div className="flex flex-col gap-1 text-sm mt-2">
                   <div className="flex items-center gap-2">
                     <Shield size={14} className="text-success" />
-                    <span className="text-success">Secured Locally</span>
+                    <span className="text-success">{t('Secured Locally')}</span>
                   </div>
                   {profile.lastBackupDate && (
                     <div className="flex items-center gap-2 text-xs text-muted">
                       <Cloud size={14} />
-                      <span>Last cloud backup: {new Date(profile.lastBackupDate).toLocaleDateString()}</span>
+                      <span>{t('Last cloud backup:')} {new Date(profile.lastBackupDate).toLocaleDateString()}</span>
                     </div>
                   )}
                 </div>
@@ -87,42 +98,42 @@ export default function Profile() {
 
             <form onSubmit={handleSave}>
               <div className="form-group mb-6 animate-fade-up">
-                <label className="form-label">Full Name</label>
+                <label className="form-label">{t('Full Name')}</label>
                 <input type="text" className="form-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. John Doe" required />
               </div>
 
               <div className="form-group mb-8">
-                <label className="form-label text-gray-300 mb-3 block">Account Type</label>
+                <label className="form-label text-gray-300 mb-3 block">{t('Account Type')}</label>
                 <div className="grid grid-cols-2 gap-4">
                   <label className={`p-4 border rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center text-center gap-2 ${mode === 'student' ? 'border-primary bg-primary bg-opacity-10 text-white' : 'border-gray-800 text-muted hover:border-gray-600'}`}>
                     <input type="radio" name="mode" value="student" className="hidden" checked={mode === 'student'} onChange={() => setMode('student')} />
-                    <span className="font-bold">Personal / Student</span>
-                    <span className="text-xs opacity-70">Daily tracking & limits</span>
+                    <span className="font-bold">{t('Personal / Student')}</span>
+                    <span className="text-xs opacity-70">{t('Daily tracking & limits')}</span>
                   </label>
                   
                   <label className={`p-4 border rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center text-center gap-2 ${mode === 'business' ? 'border-accent bg-accent bg-opacity-10 text-white' : 'border-gray-800 text-muted hover:border-gray-600'}`}>
                     <input type="radio" name="mode" value="business" className="hidden" checked={mode === 'business'} onChange={() => setMode('business')} />
-                    <span className="font-bold">Business / Pro</span>
-                    <span className="text-xs opacity-70">Invoices & P&L</span>
+                    <span className="font-bold">{t('Business / Pro')}</span>
+                    <span className="text-xs opacity-70">{t('Invoices & P&L')}</span>
                   </label>
                 </div>
               </div>
 
               {mode === 'business' && (
                 <div className="form-group mb-6 animate-fade-up">
-                  <label className="form-label">Business Name</label>
+                  <label className="form-label">{t('Business Name')}</label>
                   <input type="text" className="form-input" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. Acme Corp" required />
                 </div>
               )}
 
               <div className="form-group mb-6">
-                <label className="form-label">Total Monthly Budget / Operating Budget ({currency})</label>
+                <label className="form-label">{t('Total Monthly Budget / Operating Budget')} ({currency})</label>
                 <input type="number" className="form-input text-xl" value={monthlyBudget} onChange={(e) => setMonthlyBudget(e.target.value)} required />
               </div>
 
               <div className="flex gap-4 mb-8">
                 <div className="form-group flex-1 mb-0">
-                  <label className="form-label">Currency</label>
+                  <label className="form-label">{t('Currency')}</label>
                   <select className="form-select" value={currency} onChange={(e) => setCurrency(e.target.value)}>
                     <option value="₹">₹ (INR)</option>
                     <option value="$">$ (USD)</option>
@@ -131,8 +142,8 @@ export default function Profile() {
                   </select>
                 </div>
                 <div className="form-group flex-1 mb-0">
-                  <label className="form-label">Language</label>
-                  <select className="form-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <label className="form-label">{t('Language')}</label>
+                  <select className="form-select" value={language} onChange={handleLanguageChange}>
                     <option value="English">English</option>
                     <option value="Hindi">Hindi</option>
                     <option value="Spanish">Spanish</option>
@@ -141,7 +152,7 @@ export default function Profile() {
               </div>
 
               <button type="submit" className="btn btn-primary w-full md:w-auto shadow-neon">
-                <Save size={18} /> Save Preferences
+                <Save size={18} /> {t('Save Preferences')}
               </button>
             </form>
           </div>
@@ -150,29 +161,29 @@ export default function Profile() {
         <div className="md:col-span-1">
           <div className="glass-panel p-6 mb-6">
             <h3 className="text-lg font-bold mb-2 text-white flex items-center gap-2">
-              <Cloud size={20} className="text-primary" /> Cloud Sync
+              <Cloud size={20} className="text-primary" /> {t('Cloud Sync')}
             </h3>
             <p className="text-sm text-muted mb-6">
-              Securely back up your data to the cloud. Automated backups run weekly.
+              {t('Securely back up your data to the cloud. Automated backups run weekly.')}
             </p>
             <button 
               onClick={handleCloudBackup} 
               disabled={isBackingUp}
               className={`btn btn-primary w-full shadow-neon ${isBackingUp ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              <Cloud size={18} /> {isBackingUp ? 'Syncing...' : 'Force Cloud Backup'}
+              <Cloud size={18} /> {isBackingUp ? t('Syncing...') : t('Force Cloud Backup')}
             </button>
           </div>
 
           <div className="glass-panel p-6">
             <h3 className="text-lg font-bold mb-2 text-white flex items-center gap-2">
-              <Download size={20} className="text-accent" /> Manual Export
+              <Download size={20} className="text-accent" /> {t('Manual Export')}
             </h3>
             <p className="text-sm text-muted mb-6">
-              Your data is completely private. You can export a manual offline backup of your encrypted ledger at any time.
+              {t('Your data is completely private. You can export a manual offline backup of your encrypted ledger at any time.')}
             </p>
             <button onClick={handleExport} className="btn btn-outline w-full hover:bg-gray-800">
-              <Download size={18} /> Download JSON Backup
+              <Download size={18} /> {t('Download JSON Backup')}
             </button>
           </div>
         </div>

@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Plus, ArrowUpRight, ArrowDownRight, Briefcase, User as UserIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const { profile, expenses, addExpense } = useAppContext();
   const [showAddModal, setShowAddModal] = useState(false);
   
@@ -67,17 +69,17 @@ export default function Dashboard() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             {isBusiness ? <Briefcase size={20} className="text-primary" /> : <UserIcon size={20} className="text-accent" />}
-            <span className="badge badge-primary">{isBusiness ? 'Business Account' : 'Personal Account'}</span>
+            <span className="badge badge-primary">{isBusiness ? t('Business Account') : t('Personal Account')}</span>
           </div>
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-            {profile.name ? `Welcome back, ${profile.name.split(' ')[0]}` : (isBusiness ? profile.businessName || 'Your Business' : 'Welcome back')}
+            {profile.name ? `${t('Welcome back')}, ${profile.name.split(' ')[0]}` : (isBusiness ? profile.businessName || t('Your Business') : t('Welcome back'))}
           </h1>
           <p className="text-muted text-sm mt-1">
             {today.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
         <button className="btn btn-primary shadow-neon" onClick={() => setShowAddModal(true)}>
-          <Plus size={18} /> New Transaction
+          <Plus size={18} /> {t('New Transaction')}
         </button>
       </div>
 
@@ -85,20 +87,20 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="glass-panel p-6 col-span-1 md:col-span-2 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary opacity-10 rounded-full blur-3xl"></div>
-            <h2 className="text-muted text-sm font-medium mb-1 uppercase tracking-wider">Net Profit (This Month)</h2>
+            <h2 className="text-muted text-sm font-medium mb-1 uppercase tracking-wider">{t('Net Profit (This Month)')}</h2>
             <div className={`text-4xl font-bold mb-4 flex items-center ${profit >= 0 ? 'text-success' : 'text-danger'}`}>
               <span className="mr-1">{currency}</span>
               {profit.toLocaleString('en-IN')}
             </div>
             <div className="flex gap-4">
               <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-gray-800 flex-1">
-                <p className="text-xs text-muted mb-1">Total Revenue</p>
+                <p className="text-xs text-muted mb-1">{t('Total Revenue')}</p>
                 <p className="font-semibold text-lg flex items-center text-success">
                   {currency} {incomeSoFar.toLocaleString('en-IN')}
                 </p>
               </div>
               <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-gray-800 flex-1">
-                <p className="text-xs text-muted mb-1">Total Expenses</p>
+                <p className="text-xs text-muted mb-1">{t('Total Expenses')}</p>
                 <p className="font-semibold text-lg flex items-center text-danger">
                   {currency} {spentSoFar.toLocaleString('en-IN')}
                 </p>
@@ -109,16 +111,16 @@ export default function Dashboard() {
              <div className="w-16 h-16 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mb-4">
                <Briefcase size={28} className="text-primary" />
              </div>
-             <h3 className="font-bold text-lg mb-1">Operating Budget</h3>
+             <h3 className="font-bold text-lg mb-1">{t('Operating Budget')}</h3>
              <p className="text-2xl font-bold mb-2">{currency}{budget.toLocaleString('en-IN')}</p>
-             <p className="text-xs text-muted">Budget Remaining: {currency}{remainingBudget.toLocaleString('en-IN')}</p>
+             <p className="text-xs text-muted">{t('Budget Remaining')}: {currency}{remainingBudget.toLocaleString('en-IN')}</p>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="glass-panel p-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent opacity-10 rounded-full blur-3xl"></div>
-            <h2 className="text-muted text-sm font-medium mb-1 uppercase tracking-wider">Remaining Budget</h2>
+            <h2 className="text-muted text-sm font-medium mb-1 uppercase tracking-wider">{t('Remaining Budget')}</h2>
             <div className="text-4xl font-bold mb-4 flex items-center">
               <span className="mr-1">{currency}</span>
               {remainingBudget.toLocaleString('en-IN')}
@@ -126,14 +128,14 @@ export default function Dashboard() {
             
             <div className="flex justify-between items-center bg-black bg-opacity-40 p-4 rounded-xl border border-gray-800">
               <div>
-                <p className="text-xs text-muted mb-1">Safe to spend today</p>
+                <p className="text-xs text-muted mb-1">{t('Safe to spend today')}</p>
                 <p className="font-semibold text-xl text-accent flex items-center">
                   {currency} {Math.max(0, dailyLimit)}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted mb-1">{remainingDays} days left</p>
-                <p className="text-sm font-medium text-gray-300">Out of {currency}{budget}</p>
+                <p className="text-xs text-muted mb-1">{remainingDays} {t('days left')}</p>
+                <p className="text-sm font-medium text-gray-300">{t('Out of')} {currency}{budget}</p>
               </div>
             </div>
           </div>
@@ -142,14 +144,14 @@ export default function Dashboard() {
             <div className="glass-panel p-5 flex flex-col justify-center group hover:bg-gray-800 transition-colors">
               <div className="flex items-center text-danger mb-2">
                 <div className="p-2 rounded-full bg-red-500 bg-opacity-20 mr-2"><ArrowDownRight size={16} /></div>
-                <span className="text-sm font-medium uppercase tracking-wider text-muted group-hover:text-gray-300 transition-colors">Spent</span>
+                <span className="text-sm font-medium uppercase tracking-wider text-muted group-hover:text-gray-300 transition-colors">{t('Spent')}</span>
               </div>
               <p className="text-2xl font-bold">{currency}{spentSoFar.toLocaleString('en-IN')}</p>
             </div>
             <div className="glass-panel p-5 flex flex-col justify-center group hover:bg-gray-800 transition-colors">
               <div className="flex items-center text-success mb-2">
                 <div className="p-2 rounded-full bg-green-500 bg-opacity-20 mr-2"><ArrowUpRight size={16} /></div>
-                <span className="text-sm font-medium uppercase tracking-wider text-muted group-hover:text-gray-300 transition-colors">Earned</span>
+                <span className="text-sm font-medium uppercase tracking-wider text-muted group-hover:text-gray-300 transition-colors">{t('Earned')}</span>
               </div>
               <p className="text-2xl font-bold">{currency}{incomeSoFar.toLocaleString('en-IN')}</p>
             </div>
@@ -159,7 +161,7 @@ export default function Dashboard() {
 
       {/* Recent Transactions list */}
       <div>
-        <h3 className="text-xl font-bold mb-4">Recent Transactions</h3>
+        <h3 className="text-xl font-bold mb-4">{t('Recent Transactions')}</h3>
         <div className="glass-panel overflow-hidden p-2">
           {expenses.slice(0, 5).map((exp, i) => (
             <div key={exp.id} className="p-4 border-b border-gray-800 last:border-0 flex justify-between items-center hover:bg-gray-800 hover:bg-opacity-50 transition-colors rounded-lg">
@@ -178,7 +180,7 @@ export default function Dashboard() {
           ))}
           {expenses.length === 0 && (
             <div className="p-10 text-center text-muted border border-dashed border-gray-700 rounded-xl m-2">
-              No transactions this month. Click the Add button to start!
+              {t('No transactions this month. Click the Add button to start!')}
             </div>
           )}
         </div>
@@ -189,7 +191,7 @@ export default function Dashboard() {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div className="glass-panel-no-hover p-8 w-full max-w-md animate-fade-up">
             <h2 className="text-2xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-              New {isBusiness ? 'Business' : 'Personal'} Transaction
+              {t('New')} {isBusiness ? t('Business') : t('Personal')} {t('Transaction')}
             </h2>
             <form onSubmit={handleAddSubmit}>
               <div className="grid grid-cols-2 gap-4 mb-4">
@@ -197,42 +199,42 @@ export default function Dashboard() {
                   type="button" 
                   className={`p-3 rounded-lg border text-center font-bold transition-all ${newExpense.type === 'expense' ? 'bg-red-500 bg-opacity-20 border-red-500 text-red-500' : 'border-gray-700 text-muted'}`}
                   onClick={() => setNewExpense({...newExpense, type: 'expense'})}
-                >Expense</button>
+                >{t('Expense')}</button>
                 <button 
                   type="button" 
                   className={`p-3 rounded-lg border text-center font-bold transition-all ${newExpense.type === 'income' ? 'bg-green-500 bg-opacity-20 border-green-500 text-green-500' : 'border-gray-700 text-muted'}`}
                   onClick={() => setNewExpense({...newExpense, type: 'income'})}
-                >Income</button>
+                >{t('Income')}</button>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Amount ({currency})</label>
+                <label className="form-label">{t('Amount')} ({currency})</label>
                 <input type="number" required className="form-input text-xl font-bold" value={newExpense.amount} onChange={e => setNewExpense({...newExpense, amount: e.target.value})} placeholder="0.00" />
               </div>
               <div className="form-group">
-                <label className="form-label">Description</label>
+                <label className="form-label">{t('Description')}</label>
                 <input type="text" required className="form-input" value={newExpense.description} onChange={e => setNewExpense({...newExpense, description: e.target.value})} placeholder="e.g. Server Costs" />
               </div>
               <div className="form-group">
-                <label className="form-label">Category</label>
+                <label className="form-label">{t('Category')}</label>
                 <select className="form-select" value={newExpense.category} onChange={e => setNewExpense({...newExpense, category: e.target.value})}>
                   {(isBusiness ? businessCategories : personalCategories).map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
+                    <option key={cat} value={cat}>{t(cat)}</option>
                   ))}
-                  <option value="Other">Other</option>
+                  <option value="Other">{t('Other')}</option>
                 </select>
               </div>
               
               {isBusiness && (
                 <div className="form-group">
-                  <label className="form-label">Invoice / Receipt Number (Optional)</label>
+                  <label className="form-label">{t('Invoice / Receipt Number (Optional)')}</label>
                   <input type="text" className="form-input" value={newExpense.invoiceNumber} onChange={e => setNewExpense({...newExpense, invoiceNumber: e.target.value})} placeholder="e.g. INV-2023-001" />
                 </div>
               )}
               
               <div className="flex gap-4 mt-8">
-                <button type="button" className="btn btn-outline flex-1" onClick={() => setShowAddModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary flex-1 shadow-neon">Save Transaction</button>
+                <button type="button" className="btn btn-outline flex-1" onClick={() => setShowAddModal(false)}>{t('Cancel')}</button>
+                <button type="submit" className="btn btn-primary flex-1 shadow-neon">{t('Save Transaction')}</button>
               </div>
             </form>
           </div>

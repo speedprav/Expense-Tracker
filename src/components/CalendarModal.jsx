@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { X, ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function CalendarModal({ onClose }) {
+  const { t } = useTranslation();
   const { expenses, profile } = useAppContext();
   const currency = profile.currency || '₹';
   const isBusiness = profile.mode === 'business';
@@ -72,7 +74,7 @@ export default function CalendarModal({ onClose }) {
           <div className="flex justify-between items-center mb-6 relative">
             <h2 className="text-xl font-bold flex items-center gap-2">
               <CalendarIcon size={20} className="text-primary" />
-              Calendar View
+              {t('Calendar View')}
             </h2>
             <button onClick={onClose} className="text-muted hover:text-white md:hidden"><X size={24} /></button>
           </div>
@@ -102,20 +104,20 @@ export default function CalendarModal({ onClose }) {
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-gray-900 bg-opacity-50 p-4 rounded-xl border border-gray-800">
-              <p className="text-xs text-muted mb-1">Total Spent</p>
+              <p className="text-xs text-muted mb-1">{t('Total Spent')}</p>
               <p className="text-xl font-bold text-danger">{currency}{totalSpent.toLocaleString('en-IN')}</p>
             </div>
             <div className="bg-gray-900 bg-opacity-50 p-4 rounded-xl border border-gray-800">
-              <p className="text-xs text-muted mb-1">{isBusiness ? 'Total Income' : 'Total Earned'}</p>
+              <p className="text-xs text-muted mb-1">{isBusiness ? t('Total Income') : t('Total Earned')}</p>
               <p className="text-xl font-bold text-success">{currency}{totalEarned.toLocaleString('en-IN')}</p>
             </div>
           </div>
 
-          <h4 className="text-sm font-semibold mb-3 text-muted uppercase tracking-wider">Transactions</h4>
+          <h4 className="text-sm font-semibold mb-3 text-muted uppercase tracking-wider">{t('Transactions')}</h4>
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar" style={{ maxHeight: '300px' }}>
             {dailyTransactions.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-muted opacity-50 py-8 border border-dashed border-gray-800 rounded-xl">
-                <p>No transactions on this day</p>
+                <p>{t('No transactions on this day')}</p>
               </div>
             ) : (
               <div className="flex flex-col gap-3">
