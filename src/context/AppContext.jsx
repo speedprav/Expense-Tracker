@@ -104,6 +104,9 @@ export function AppProvider({ children }) {
     if (code === 'auth/popup-closed-by-user') {
       return "Google sign-in was cancelled.";
     }
+    if (code === 'auth/unauthorized-domain') {
+      return "Firebase Error: This domain is not authorized for OAuth. Please go to Firebase Console > Authentication > Settings > Authorized Domains and add your Vercel URL.";
+    }
     return error.message || "An unexpected error occurred.";
   };
 
