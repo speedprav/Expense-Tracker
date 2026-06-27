@@ -1,26 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Download, ArrowRight, PieChart, Shield, Cloud, Layout, CheckCircle } from 'lucide-react';
+import { Apple, QrCode } from 'lucide-react';
 
 export default function Landing({ onLaunch }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
-    // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
-      // Update UI notify the user they can install the PWA
       setIsInstallable(true);
     };
-
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
   }, []);
 
   const handleInstallClick = async () => {
@@ -28,144 +20,208 @@ export default function Landing({ onLaunch }) {
       alert("Installation is not supported or the app is already installed.");
       return;
     }
-    
-    // Show the install prompt
     deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    // Optionally, send analytics event with outcome of user choice
-    console.log(`User response to the install prompt: ${outcome}`);
-    
-    // We've used the prompt, and can't use it again, throw it away
+    await deferredPrompt.userChoice;
     setDeferredPrompt(null);
     setIsInstallable(false);
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
-      {/* Dynamic Background */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary opacity-20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent opacity-20 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
-
-      {/* Navbar */}
-      <header className="w-full p-6 flex justify-between items-center z-10 border-b border-gray-800 bg-background bg-opacity-80 backdrop-blur-md">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center font-bold text-white shadow-neon">
-            E
-          </div>
-          <span className="text-xl font-bold tracking-tight text-white">Expensr</span>
-        </div>
-        <button onClick={onLaunch} className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-          Sign In
-        </button>
-      </header>
-
-      {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 pt-20 pb-32 z-10">
-        <div className="inline-block mb-4 px-3 py-1 rounded-full border border-gray-700 bg-gray-800 bg-opacity-50 text-xs font-medium text-primary shadow-sm animate-fade-down">
-          v2.0 is now live! ✨
-        </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          Master your money with <br className="hidden md:block"/>
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
-            intelligent tracking.
-          </span>
-        </h1>
-        <p className="text-lg md:text-xl text-gray-400 max-w-2xl mb-10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          The premium financial dashboard for students and businesses. Track expenses, manage shared debts, and generate beautiful PDF reports automatically.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-up" style={{ animationDelay: '0.3s' }}>
-          {isInstallable ? (
-            <button 
-              onClick={handleInstallClick} 
-              className="btn btn-primary shadow-neon py-4 px-8 text-lg flex items-center justify-center gap-2"
-            >
-              <Download size={20} /> Install App
-            </button>
-          ) : (
-            <button 
-              onClick={() => alert("To install, open this page in Chrome/Safari, tap the Share/Menu button, and select 'Add to Home Screen'.")} 
-              className="btn bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 py-4 px-8 text-lg flex items-center justify-center gap-2"
-            >
-              <Download size={20} /> Download App
-            </button>
-          )}
-          
-          <button 
-            onClick={onLaunch} 
-            className="btn btn-outline py-4 px-8 text-lg flex items-center justify-center gap-2 group"
-          >
-            Launch Web App <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      </main>
-
-      {/* Features Grid */}
-      <section className="bg-gray-900 border-t border-gray-800 py-24 px-4 z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Everything you need to succeed</h2>
-            <p className="text-gray-400">Enterprise-grade tools packaged in a beautiful, simple interface.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={<PieChart className="text-primary" size={24} />}
-              title="Advanced Analytics"
-              description="Visualize your spending patterns with beautiful, interactive charts and identify where your money goes."
-            />
-            <FeatureCard 
-              icon={<Users className="text-accent" size={24} />}
-              title="Smart Debt Ledger"
-              description="Keep track of exactly who owes you money, and who you owe, with automated net-balance calculations."
-            />
-            <FeatureCard 
-              icon={<Cloud className="text-success" size={24} />}
-              title="Automated Cloud Sync"
-              description="Never lose your data. We automatically back up your entire encrypted ledger to the cloud every week."
-            />
-            <FeatureCard 
-              icon={<Shield className="text-warning" size={24} />}
-              title="100% Private"
-              description="Your financial data is secured locally by default. You are in complete control of your privacy."
-            />
-            <FeatureCard 
-              icon={<Layout className="text-pink-500" size={24} />}
-              title="Beautiful PDF Reports"
-              description="Generate stunning Weekly, Monthly, and Yearly financial reports with a single click."
-            />
-            <FeatureCard 
-              icon={<CheckCircle className="text-cyan-400" size={24} />}
-              title="Works Offline"
-              description="Because it's a Progressive Web App, you can log expenses even when you have no internet connection."
-            />
-          </div>
-        </div>
-      </section>
+    <div style={{
+      minHeight: '100vh',
+      width: '100vw',
+      backgroundColor: '#0a0a0a',
+      color: 'white',
+      position: 'relative',
+      overflow: 'hidden',
+      fontFamily: "'Outfit', sans-serif"
+    }}>
       
-      {/* Footer */}
-      <footer className="py-8 text-center text-gray-500 border-t border-gray-800 z-10">
-        <p>© 2026 Expensr App. All rights reserved.</p>
-      </footer>
-    </div>
-  );
-}
-
-function FeatureCard({ icon, title, description }) {
-  return (
-    <div className="glass-panel p-8 hover:-translate-y-1 transition-transform duration-300">
-      <div className="w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center mb-6 shadow-sm">
-        {icon}
+      {/* Top Navbar for "Launch Web App" */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        padding: '2rem',
+        zIndex: 50
+      }}>
+        <button 
+          onClick={onLaunch}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#a1a1aa',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            cursor: 'pointer',
+            transition: 'color 0.3s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+          onMouseOut={(e) => e.currentTarget.style.color = '#a1a1aa'}
+        >
+          Log In / Launch Web App
+        </button>
       </div>
-      <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-      <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+
+      {/* Sharp Diagonal Background */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#141414',
+        clipPath: 'polygon(55% 0, 100% 0, 100% 100%, 35% 100%)',
+        zIndex: 0
+      }}></div>
+
+      {/* Main Content Container */}
+      <div style={{
+        position: 'relative',
+        zIndex: 10,
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 2rem'
+      }}>
+        
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          width: '100%',
+          gap: '2rem'
+        }}>
+          
+          {/* Left Column: Text & CTA */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '3rem 0'
+          }}>
+            
+            {/* Logo */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '4rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2v20" />
+                <path d="M12 8c2.5 0 4.5-2 4.5-4.5S14.5 2 12 2" />
+                <path d="M12 22c-2.5 0-4.5-2-4.5-4.5S9.5 13 12 13" />
+              </svg>
+              <span style={{ fontSize: '0.875rem', letterSpacing: '0.2em', color: '#d1d5db', textTransform: 'uppercase' }}>
+                Expensr
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1 style={{
+              fontSize: 'min(4rem, 10vw)',
+              fontWeight: 700,
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              marginBottom: '1.5rem',
+              margin: '0 0 1.5rem 0'
+            }}>
+              <span style={{ display: 'block', color: 'white', marginBottom: '0.5rem' }}>Download the</span>
+              <span style={{ display: 'block', color: '#d9b775' }}>Expensr Copilot™</span>
+            </h1>
+            
+            {/* Subtext */}
+            <p style={{
+              fontSize: '1rem',
+              color: '#a1a1aa',
+              maxWidth: '400px',
+              marginBottom: '3rem',
+              lineHeight: 1.6
+            }}>
+              Get our AI-powered mobile app to access intelligent tracking features, stay in the know about ledgers, and more. Available for iOS.
+            </p>
+
+            {/* Buttons & QR */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'flex-start' }}>
+              
+              {/* Download APK Button */}
+              <a 
+                href="/Expensr.apk" 
+                download="Expensr.apk"
+                style={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                  transition: 'background-color 0.2s',
+                  textDecoration: 'none'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+              >
+                {/* Android SVG Icon */}
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993s-.4482.9997-.9993.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5515 0 .9997.4482.9997.9993s-.4482.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592c.1118-.1946.0462-.444-.1481-.5558-.1946-.1118-.444-.0462-.5558.1481l-2.0415 3.536c-1.4055-.6363-2.9831-1.002-4.6644-1.002s-3.2589.3657-4.6644 1.002l-2.0415-3.536c-.1118-.1943-.3612-.2599-.5558-.1481-.1943.1118-.2599.3612-.1481.5558l1.9973 3.4592C4.1624 10.3705 2.1466 12.8718 2 15.8601h20c-.1466-2.9883-2.1624-5.4896-5.0725-6.5387z" />
+                </svg>
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.05em', marginBottom: '2px', color: '#374151' }}>
+                    DIRECT DOWNLOAD
+                  </div>
+                  <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
+                    Download APK
+                  </div>
+                </div>
+              </a>
+
+              {/* QR Code */}
+              <div style={{
+                backgroundColor: 'white',
+                padding: '0.75rem',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '4px solid #0a0a0a',
+                boxShadow: '0 10px 15px rgba(0,0,0,0.2)'
+              }}>
+                <QrCode size={90} color="black" strokeWidth={1.2} />
+              </div>
+
+            </div>
+
+            <div style={{ marginTop: '5rem', fontSize: '11px', color: '#71717a' }}>
+              © Copyright 2026 Expensr Inc. — All rights reserved.
+            </div>
+          </div>
+
+          {/* Right Column: Phone Mockup */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative'
+          }}>
+            <img 
+              src="/mockup.png" 
+              alt="Expensr App Screen" 
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+                objectFit: 'contain',
+                borderRadius: '40px',
+                filter: 'drop-shadow(0 25px 25px rgba(0,0,0,0.5))',
+                transform: 'translateX(5%)'
+              }}
+            />
+          </div>
+
+        </div>
+      </div>
     </div>
   );
-}
-
-function Users(props) {
-  return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
 }
