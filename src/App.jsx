@@ -182,8 +182,8 @@ function TopHeader({ setShowMobileSidebar }) {
         <button className="hidden md:flex glass-card p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all border-white/5">
           <Moon size={18} />
         </button>
-        <div className="w-10 h-10 rounded-full glass-card p-0.5 overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Profile" className="w-full h-full rounded-full object-cover" />
+        <div className="w-10 h-10 rounded-full glass-card p-0.5 overflow-hidden border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)] flex items-center justify-center bg-black/40">
+          <img src="/pwa-192x192.png" alt="App Icon" className="w-8 h-8 object-contain" />
         </div>
       </div>
     </header>

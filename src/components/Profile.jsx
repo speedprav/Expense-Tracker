@@ -70,22 +70,22 @@ export default function Profile() {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <div className="glass-panel p-8 mb-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary opacity-5 rounded-full blur-3xl"></div>
+          <div className="glass-card rounded-3xl p-8 mb-6 relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
             
-            <div className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-800">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-3xl font-bold shadow-neon">
+            <div className="flex items-center gap-6 mb-8 pb-8 border-b border-white/5">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-3xl font-bold shadow-[0_0_20px_rgba(212,175,55,0.4)] text-black">
                 {profile.name ? profile.name.substring(0, 1).toUpperCase() : (user?.email ? user.email.substring(0, 1).toUpperCase() : 'U')}
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-1">{profile.name || user?.email || t('Local User')}</h2>
+                <h2 className="text-3xl font-light text-white mb-1 tracking-wide">{profile.name || user?.email || t('Local User')}</h2>
                 <div className="flex flex-col gap-1 text-sm mt-2">
                   <div className="flex items-center gap-2">
-                    <Shield size={14} className="text-success" />
-                    <span className="text-success">{t('Secured Locally')}</span>
+                    <Shield size={14} className="text-green-400" />
+                    <span className="text-green-400 font-medium tracking-wide">{t('Secured Locally')}</span>
                   </div>
                   {profile.lastBackupDate && (
-                    <div className="flex items-center gap-2 text-xs text-muted">
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
                       <Cloud size={14} />
                       <span>{t('Last cloud backup:')} {new Date(profile.lastBackupDate).toLocaleDateString()}</span>
                     </div>
@@ -95,61 +95,61 @@ export default function Profile() {
             </div>
 
             <form onSubmit={handleSave}>
-              <div className="form-group mb-6 animate-fade-up">
-                <label className="form-label">{t('Full Name')}</label>
-                <input type="text" className="form-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. John Doe" required />
+              <div className="mb-6 animate-fade-up">
+                <label className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2 block">{t('Full Name')}</label>
+                <input type="text" className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white outline-none focus:border-yellow-500/50 focus:bg-black/60 transition-all shadow-inner" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. John Doe" required />
               </div>
 
-              <div className="form-group mb-8">
-                <label className="form-label text-gray-300 mb-3 block">{t('Account Type')}</label>
-                <div className="grid grid-cols-2 gap-4">
-                  <label className={`p-4 border rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center text-center gap-2 ${mode === 'student' ? 'border-primary bg-primary bg-opacity-10 text-white' : 'border-gray-800 text-muted hover:border-gray-600'}`}>
+              <div className="mb-8">
+                <label className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-3 block">{t('Account Type')}</label>
+                <div className="grid grid-cols-2 gap-4 bg-black/20 p-1 rounded-2xl border border-white/5">
+                  <label className={`py-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center text-center gap-1 ${mode === 'student' ? 'bg-white/10 text-white shadow-md border border-white/5' : 'text-gray-500 hover:text-white'}`}>
                     <input type="radio" name="mode" value="student" className="hidden" checked={mode === 'student'} onChange={() => setMode('student')} />
-                    <span className="font-bold">{t('Personal / Student')}</span>
-                    <span className="text-xs opacity-70">{t('Daily tracking & limits')}</span>
+                    <span className="font-medium">{t('Personal')}</span>
+                    <span className="text-[10px] uppercase tracking-wider">{t('Daily tracking')}</span>
                   </label>
                   
-                  <label className={`p-4 border rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center text-center gap-2 ${mode === 'business' ? 'border-accent bg-accent bg-opacity-10 text-white' : 'border-gray-800 text-muted hover:border-gray-600'}`}>
+                  <label className={`py-4 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center text-center gap-1 ${mode === 'business' ? 'bg-white/10 text-white shadow-md border border-white/5' : 'text-gray-500 hover:text-white'}`}>
                     <input type="radio" name="mode" value="business" className="hidden" checked={mode === 'business'} onChange={() => setMode('business')} />
-                    <span className="font-bold">{t('Business / Pro')}</span>
-                    <span className="text-xs opacity-70">{t('Invoices & P&L')}</span>
+                    <span className="font-medium">{t('Business')}</span>
+                    <span className="text-[10px] uppercase tracking-wider">{t('Invoices & P&L')}</span>
                   </label>
                 </div>
               </div>
 
               {mode === 'business' && (
-                <div className="form-group mb-6 animate-fade-up">
-                  <label className="form-label">{t('Business Name')}</label>
-                  <input type="text" className="form-input" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. Acme Corp" required />
+                <div className="mb-6 animate-fade-up">
+                  <label className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2 block">{t('Business Name')}</label>
+                  <input type="text" className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white outline-none focus:border-yellow-500/50 focus:bg-black/60 transition-all shadow-inner" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. Acme Corp" required />
                 </div>
               )}
 
-              <div className="form-group mb-6">
-                <label className="form-label">{t('Total Monthly Budget / Operating Budget')} ({currency})</label>
-                <input type="number" className="form-input text-xl" value={monthlyBudget} onChange={(e) => setMonthlyBudget(e.target.value)} required />
+              <div className="mb-6">
+                <label className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2 block">{t('Total Monthly Budget')} ({currency})</label>
+                <input type="number" className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-4 text-white text-xl outline-none focus:border-yellow-500/50 focus:bg-black/60 transition-all shadow-inner" value={monthlyBudget} onChange={(e) => setMonthlyBudget(e.target.value)} required />
               </div>
 
-              <div className="flex gap-4 mb-8">
-                <div className="form-group flex-1 mb-0">
-                  <label className="form-label">{t('Currency')}</label>
-                  <select className="form-select" value={currency} onChange={(e) => setCurrency(e.target.value)}>
-                    <option value="₹">₹ (INR)</option>
-                    <option value="$">$ (USD)</option>
-                    <option value="€">€ (EUR)</option>
-                    <option value="£">£ (GBP)</option>
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div>
+                  <label className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2 block">{t('Currency')}</label>
+                  <select className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white outline-none focus:border-yellow-500/50 focus:bg-black/60 transition-all shadow-inner" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                    <option value="₹" className="bg-gray-900">₹ (INR)</option>
+                    <option value="$" className="bg-gray-900">$ (USD)</option>
+                    <option value="€" className="bg-gray-900">€ (EUR)</option>
+                    <option value="£" className="bg-gray-900">£ (GBP)</option>
                   </select>
                 </div>
-                <div className="form-group flex-1 mb-0">
-                  <label className="form-label">{t('Language')}</label>
-                  <select className="form-select" value={language} onChange={handleLanguageChange}>
-                    <option value="English">English</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="Spanish">Spanish</option>
+                <div>
+                  <label className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2 block">{t('Language')}</label>
+                  <select className="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white outline-none focus:border-yellow-500/50 focus:bg-black/60 transition-all shadow-inner" value={language} onChange={handleLanguageChange}>
+                    <option value="English" className="bg-gray-900">English</option>
+                    <option value="Hindi" className="bg-gray-900">Hindi</option>
+                    <option value="Spanish" className="bg-gray-900">Spanish</option>
                   </select>
                 </div>
               </div>
 
-              <button type="submit" className="btn btn-primary w-full md:w-auto shadow-neon">
+              <button type="submit" className="w-full md:w-auto py-4 px-8 rounded-xl font-medium text-black bg-gradient-to-r from-yellow-500 to-yellow-300 hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(212,175,55,0.3)] flex items-center justify-center gap-2">
                 <Save size={18} /> {t('Save Preferences')}
               </button>
             </form>
@@ -157,30 +157,30 @@ export default function Profile() {
         </div>
 
         <div className="md:col-span-1">
-          <div className="glass-panel p-6 mb-6">
-            <h3 className="text-lg font-bold mb-2 text-white flex items-center gap-2">
-              <Cloud size={20} className="text-primary" /> {t('Cloud Sync')}
+          <div className="glass-card rounded-3xl p-6 mb-6">
+            <h3 className="text-lg font-light mb-2 text-white flex items-center gap-2">
+              <Cloud size={20} className="text-yellow-500" /> {t('Cloud Sync')}
             </h3>
-            <p className="text-sm text-muted mb-6">
+            <p className="text-sm text-gray-400 mb-6">
               {t('Securely back up your data to the cloud. Automated backups run weekly.')}
             </p>
             <button 
               onClick={handleCloudBackup} 
               disabled={isBackingUp}
-              className={`btn btn-primary w-full shadow-neon ${isBackingUp ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full py-4 rounded-xl font-medium flex items-center justify-center gap-2 transition-all border ${isBackingUp ? 'opacity-50 cursor-not-allowed bg-white/5 border-white/5 text-gray-400' : 'bg-white/10 hover:bg-white/20 text-white border-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'}`}
             >
               <Cloud size={18} /> {isBackingUp ? t('Syncing...') : t('Force Cloud Backup')}
             </button>
           </div>
 
-          <div className="glass-panel p-6">
-            <h3 className="text-lg font-bold mb-2 text-white flex items-center gap-2">
-              <Download size={20} className="text-accent" /> {t('Manual Export')}
+          <div className="glass-card rounded-3xl p-6">
+            <h3 className="text-lg font-light mb-2 text-white flex items-center gap-2">
+              <Download size={20} className="text-gray-300" /> {t('Manual Export')}
             </h3>
-            <p className="text-sm text-muted mb-6">
+            <p className="text-sm text-gray-400 mb-6">
               {t('Your data is completely private. You can export a manual offline backup of your encrypted ledger at any time.')}
             </p>
-            <button onClick={handleExport} className="btn btn-outline w-full hover:bg-gray-800">
+            <button onClick={handleExport} className="w-full py-4 rounded-xl font-medium text-gray-400 bg-white/5 hover:bg-white/10 hover:text-white transition-all border border-white/5 flex items-center justify-center gap-2">
               <Download size={18} /> {t('Download JSON Backup')}
             </button>
           </div>
