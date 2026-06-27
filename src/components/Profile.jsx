@@ -26,16 +26,14 @@ export default function Profile() {
       currency,
       language
     });
-    const langMap = { 'English': 'en', 'Hindi': 'hi', 'Spanish': 'es' };
-    i18n.changeLanguage(langMap[language] || 'en');
+    i18n.changeLanguage(language);
     alert(t('Profile preferences saved!'));
   };
 
   const handleLanguageChange = (e) => {
     const val = e.target.value;
     setLanguage(val);
-    const langMap = { 'English': 'en', 'Hindi': 'hi', 'Spanish': 'es' };
-    i18n.changeLanguage(langMap[val] || 'en');
+    i18n.changeLanguage(val);
   };
 
   const handleExport = () => {
