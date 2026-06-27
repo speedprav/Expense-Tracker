@@ -4,7 +4,8 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  sendEmailVerification
 } from 'firebase/auth';
 
 const AppContext = createContext();
@@ -40,7 +41,12 @@ export function AppProvider({ children }) {
     if (storedPeople) setPeople(JSON.parse(storedPeople));
     
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      // Only set user if their email is verified
+      if (currentUser && currentUser.emailVerified) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
@@ -100,6 +106,10 @@ export function AppProvider({ children }) {
   const login = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (!userCredential.user.emailVerified) {
+        await signOut(auth);
+        return { success: false, error: "Please verify your email address before logging in. Check your inbox!" };
+      }
       setUser(userCredential.user);
       return { success: true };
     } catch (error) {
@@ -111,9 +121,13 @@ export function AppProvider({ children }) {
   const signup = async (email, password, profileDetails) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      setUser(userCredential.user);
+      // Send verification email immediately
+      await sendEmailVerification(userCredential.user);
+      // Sign them out so they are forced to verify
+      await signOut(auth);
       setProfile(prev => ({ ...prev, ...profileDetails }));
-      return { success: true };
+      // Return a pseudo-error to show the message on the UI
+      return { success: false, error: "Account created! We've sent a verification link to your email. Please verify your email before logging in." };
     } catch (error) {
       console.error("Signup Error:", error);
       return { success: false, error: getFriendlyErrorMessage(error) };

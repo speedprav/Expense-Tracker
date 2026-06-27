@@ -9,16 +9,18 @@ import Analytics from './components/Analytics';
 import Ledger from './components/Ledger';
 import Profile from './components/Profile';
 import CalendarModal from './components/CalendarModal';
+import { useTranslation } from 'react-i18next';
 
 function Navigation({ onOpenCalendar }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const { logout } = useAppContext();
 
   const navItems = [
-    { path: '/', icon: <Home size={22} />, label: 'Home' },
-    { path: '/analytics', icon: <PieChart size={22} />, label: 'Analytics' },
-    { path: '/ledger', icon: <Users size={22} />, label: 'Ledger' },
-    { path: '/profile', icon: <Settings size={22} />, label: 'Profile' },
+    { path: '/', icon: <Home size={22} />, label: t('Home') },
+    { path: '/analytics', icon: <PieChart size={22} />, label: t('Analytics') },
+    { path: '/ledger', icon: <Users size={22} />, label: t('Ledger') },
+    { path: '/profile', icon: <Settings size={22} />, label: t('Profile') },
   ];
 
   return (
@@ -41,7 +43,7 @@ function Navigation({ onOpenCalendar }) {
         className="nav-link bg-transparent border-none cursor-pointer group"
       >
         <Calendar size={22} className="group-hover:text-primary transition-colors" />
-        <span className="nav-label">Calendar</span>
+        <span className="nav-label">{t('Calendar')}</span>
       </button>
 
       {/* Logout Button */}
@@ -50,7 +52,7 @@ function Navigation({ onOpenCalendar }) {
         className="nav-link bg-transparent border-none cursor-pointer group ml-auto text-danger"
       >
         <LogOut size={22} />
-        <span className="nav-label">Logout</span>
+        <span className="nav-label">{t('Logout')}</span>
       </button>
     </nav>
   );
