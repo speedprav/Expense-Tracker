@@ -17,7 +17,17 @@ export default function Landing({ onLaunch }) {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      alert("Installation is not supported or the app is already installed.");
+      // Check if it's an iOS device (Safari doesn't support deferredPrompt)
+      const isIos = () => {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        return /iphone|ipad|ipod/.test(userAgent);
+      };
+
+      if (isIos()) {
+        alert("To install on iOS: Tap the 'Share' icon at the bottom of your screen, then scroll down and tap 'Add to Home Screen'.");
+      } else {
+        alert("The 'Install' prompt isn't ready. You may have already installed the app, or your browser doesn't support automatic installation. Try looking for an install icon in your URL bar!");
+      }
       return;
     }
     deferredPrompt.prompt();
