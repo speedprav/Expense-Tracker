@@ -76,7 +76,10 @@ export function AppProvider({ children }) {
 
   const getFriendlyErrorMessage = (error) => {
     const code = error.code || '';
-    if (code === 'auth/configuration-not-found' || code === 'auth/user-not-found' || code === 'auth/invalid-credential') {
+    if (code === 'auth/configuration-not-found' || code === 'auth/operation-not-allowed') {
+      return "Firebase Error: Please go to Firebase Console > Authentication > Sign-in method, and enable 'Email/Password'.";
+    }
+    if (code === 'auth/user-not-found' || code === 'auth/invalid-credential') {
       return "User not found or email not found";
     }
     if (code === 'auth/wrong-password') {
@@ -100,6 +103,7 @@ export function AppProvider({ children }) {
       setUser(userCredential.user);
       return { success: true };
     } catch (error) {
+      console.error("Login Error:", error);
       return { success: false, error: getFriendlyErrorMessage(error) };
     }
   };
@@ -111,6 +115,7 @@ export function AppProvider({ children }) {
       setProfile(prev => ({ ...prev, ...profileDetails }));
       return { success: true };
     } catch (error) {
+      console.error("Signup Error:", error);
       return { success: false, error: getFriendlyErrorMessage(error) };
     }
   };
