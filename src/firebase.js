@@ -3,13 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyCan-L0tJB0TJL4IVJHZ5KU1akGacg3LZE",
+  authDomain: "expense-tracker-28654.firebaseapp.com",
+  projectId: "expense-tracker-28654",
+  storageBucket: "expense-tracker-28654.firebasestorage.app",
+  messagingSenderId: "234237857855",
+  appId: "1:234237857855:web:2948ee8779436d2b50288a",
+  measurementId: "G-YF9GL09R4F"
 };
 
 // Initialize Firebase
