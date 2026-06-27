@@ -1,17 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #d4af37;
+  --font-sans: "Outfit", sans-serif;
+}
 
 @layer base {
-  :root {
-    --primary: #d4af37;
-    --primary-glow: rgba(212, 175, 55, 0.3);
-  }
-
   body {
-    font-family: 'Outfit', sans-serif;
     background-color: #050505;
     color: #fcfcfc;
     overflow-x: hidden;
